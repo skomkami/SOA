@@ -3,20 +3,66 @@ package agh.pl;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.DoubleToLongFunction;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+@ManagedBean
+@SessionScoped
+public class Converter implements Serializable{
 
-public class Converter implements Serializable {
-    public String getDefaultFrom() {
-        return "PL";
+    public String fromCurrency;
+    public String toCurrency;
+
+    public String getFromCurrency() {
+        return fromCurrency;
+    }
+    public void setFromCurrency(String fromCurrency) {
+        this.fromCurrency = fromCurrency;
     }
 
-    private static Map<String,Double> currencyValue;
-    static{
-        currencyValue = new LinkedHashMap<String,Double>();
-        currencyValue.put("PL", 1.0);
-        currencyValue.put("EUR", 4.3);
+    public String getToCurrency() {
+        return toCurrency;
     }
 
-    public Map<String,Double> getCurrencyValue() {
-        return currencyValue;
+    public void setToCurrency(String toCurrency) {
+        this.toCurrency = toCurrency;
     }
+
+    public void add() {
+        currenciesValues.put(country, value);
+    }
+
+    private String country;
+    private String value;
+
+    public String getCountry() {
+        return country;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    private static Map<String, Double> currenciesValues;
+    static
+    {
+        currenciesValues = new LinkedHashMap<String, Double>();
+
+        currenciesValues.put("PL", 1.0);
+        currenciesValues.put("EUR", 4.3);
+    }
+
+    public Map<String, Double> getCurrenciesValues()
+    {
+        return currenciesValues;
+    }
+
 }
