@@ -8,13 +8,31 @@
 <h:body>
 
    <h:form>
-      <h:selectOneMenu value="#{converter.fromCurrency}">
+
+      <h:outputLabel for="fromCurrency">
+         <h:outputText value="Choose from currency"/>
+      </h:outputLabel>
+      <h:selectOneMenu id="fromCurrency" value="#{converter.fromCurrency}">
          <f:selectItems value="#{converter.currenciesValues}" />
+      </h:selectOneMenu><br/>
+
+      <h:outputLabel for="toCurrency">
+         <h:outputText value="Choose to currency"/>
+      </h:outputLabel>
+      <h:selectOneMenu id="toCurrency" value="#{converter.toCurrency}" default="EUR">
+         <f:selectItems default="EUR" value="#{converter.currenciesValues}" />
       </h:selectOneMenu>
+      <br/>
+
+      <h:outputLabel for="amount">
+         <h:outputText value="Enter amount"/>
+      </h:outputLabel>
+      <h:inputText id="amount" value="#{converter.amount}" converterMessage="Please enter digits only."/>
 
       <br/><br/>
-      <h:commandButton value="Submit" action="response"/>
-      <h:commandButton value="Reset" type="reset"/>
+      <h:commandButton value="Submit" action="#{converter.result}"/>
    </h:form>
+
+   <h:outputLink value="addCurrency.xhtml">Add curencies</h:outputLink>
 </h:body>
 </html>

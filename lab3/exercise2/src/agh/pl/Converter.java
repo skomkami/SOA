@@ -1,53 +1,61 @@
 package agh.pl;
 
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.function.DoubleToLongFunction;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 @ManagedBean
 @SessionScoped
 public class Converter implements Serializable{
 
-    public String fromCurrency;
-    public String toCurrency;
+    private Double fromCurrency;
+    private Double toCurrency = getCurrenciesValues().get("EUR");
+    private Double amount = 1.0;
 
-    public String getFromCurrency() {
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public Double getFromCurrency() {
         return fromCurrency;
     }
-    public void setFromCurrency(String fromCurrency) {
+    public void setFromCurrency(Double fromCurrency) {
         this.fromCurrency = fromCurrency;
     }
 
-    public String getToCurrency() {
+    public Double getToCurrency() {
         return toCurrency;
     }
 
-    public void setToCurrency(String toCurrency) {
+    public void setToCurrency(Double toCurrency) {
         this.toCurrency = toCurrency;
     }
 
     public void add() {
-        currenciesValues.put(country, value);
+        currenciesValues.put(currency, value);
     }
 
-    private String country;
-    private String value;
+    private String currency;
+    private Double value;
 
-    public String getCountry() {
-        return country;
+    public String getCurrency() {
+        return currency;
     }
 
-    public String getValue() {
+    public Double getValue() {
         return value;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
-    public void setValue(String value) {
+    public void setValue(Double value) {
         this.value = value;
     }
 
@@ -63,6 +71,12 @@ public class Converter implements Serializable{
     public Map<String, Double> getCurrenciesValues()
     {
         return currenciesValues;
+    }
+
+    public String result() {
+        Double result = amount*fromCurrency/toCurrency;
+        System.out.println("Amount in new currency equals " + result);
+        return "result";
     }
 
 }

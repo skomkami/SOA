@@ -9,9 +9,20 @@
 
     <h:form>
 
-        <h:inputText id="country" value="#{converter.country}"/>
-        <h:inputText id="value" value="#{converter.value}"/>
+        <h:outputLabel for="currency">
+            <h:outputText value="Enter currency"/>
+        </h:outputLabel>
+        <h:inputText id="currency" value="#{converter.currency}"/>
+        <br/>
+
+        <h:outputLabel for="value">
+            <h:outputText value="Enter currency"/>
+        </h:outputLabel>
+        <h:inputText id="value" value="#{converter.value}" converterMessage="Please enter digits only."/>
+
         <h:commandButton value="Submit" action="#{converter.add}"/>
     </h:form>
+
+    <h:outputLink value="index.xhtml">Convert currencies</h:outputLink>
 </h:body>
 </html>

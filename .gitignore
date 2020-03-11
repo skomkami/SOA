@@ -1,0 +1,13 @@
+*.iml
+
+**/out
+
+**/.idea
+
+**/libs
+
+**/lib
+
+*.pdf
+
+**/target
