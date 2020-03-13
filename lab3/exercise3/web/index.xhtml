@@ -5,7 +5,69 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-   <f:view>
-      <h:outputLabel value="Hello, world"/>
-   </f:view>
+
+
+<h:head>
+   <title>Car lot</title>
+</h:head>
+
+<h:body>
+   <h:form>
+      <h:outputLabel for="brand">
+         <h:outputText value="Choose brand"/>
+      </h:outputLabel>
+      <h:selectOneMenu id="brand" value="#{usedcarlot.mark}">
+         <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+         <f:selectItems value="#{usedcarlot.marks}" />
+         <f:ajax listener="#{usedcarlot.update}" render="@form" />
+      </h:selectOneMenu><br/>
+
+      <h:outputLabel for="model">
+         <h:outputText value="Choose model: "/>
+      </h:outputLabel>
+      <h:selectOneMenu id="model" value="#{usedcarlot.model}">
+         <f:selectItems value="#{usedcarlot.models}" />
+      </h:selectOneMenu>
+      <br/>
+
+      <h:outputLabel for="minPrice">
+         <h:outputText value="Min price: "/>
+      </h:outputLabel>
+      <h:inputText id="minPrice" action="#{usedcarlot.minPrice}"/>
+      <br/>
+
+      <h:outputLabel for="maxPrice">
+         <h:outputText value="Min price: "/>
+      </h:outputLabel>
+      <h:inputText id="maxPrice" action="#{usedcarlot.maxPrice}"/><br/>
+
+      <h:outputLabel for="fuelType">
+         <h:outputText value="Min price: "/>
+      </h:outputLabel>
+      <h:selectOneMenu id="fuelType" value="#{usedcarlot.fuelType}">
+         <f:selectItem itemValue="Diesel"/>
+         <f:selectItem itemValue="Gasoline"/>
+      </h:selectOneMenu><br/>
+
+      <h:outputLabel for="name">
+         <h:outputText value="Enter your name: "/>
+      </h:outputLabel>
+      <h:inputText binding="#{name}" required="true" id="name">
+         <f:validateRegex pattern="^[a-zA-Z]+(([' -][a-zA-Z ])?[a-zA-Z]*)*$"/>
+         <f:ajax event="keyup" render="submit"/>
+      </h:inputText><br/>
+
+
+      <h:outputLabel for="phone">
+         <h:outputText value="Enter your phone: "/>
+      </h:outputLabel>
+      <h:inputText binding="#{phone}" required="true" id="phone">
+         <f:validateRegex pattern="^([+]?[\d]+)?$"/>
+         <f:ajax event="keyup" render="submit"  />
+      </h:inputText><br/>
+
+      <h:commandButton type="submit" id="submit" disabled="#{not (name.valid and phone.valid) }" value="Submit"/>
+      <h:commandButton type="reset" value="Reset"/>
+   </h:form>
+</h:body>
 </html>

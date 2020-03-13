@@ -19,8 +19,8 @@
       <h:outputLabel for="toCurrency">
          <h:outputText value="Choose to currency"/>
       </h:outputLabel>
-      <h:selectOneMenu id="toCurrency" value="#{converter.toCurrency}" default="EUR">
-         <f:selectItems default="EUR" value="#{converter.currenciesValues}" />
+      <h:selectOneMenu id="toCurrency" value="#{converter.toCurrency}">
+         <f:selectItems value="#{converter.currenciesValues}" />
       </h:selectOneMenu>
       <br/>
 
