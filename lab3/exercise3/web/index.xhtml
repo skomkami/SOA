@@ -4,15 +4,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 
 <h:head>
    <title>Car lot</title>
+   <style type="text/css">
+      .error {color: red}
+   </style>
 </h:head>
 
 <h:body>
-   <h:form>
+   <h:form method="POST">
       <h:outputLabel for="brand">
          <h:outputText value="Choose brand"/>
       </h:outputLabel>
@@ -27,32 +31,36 @@
       </h:outputLabel>
       <h:selectOneMenu id="model" value="#{usedcarlot.model}">
          <f:selectItems value="#{usedcarlot.models}" />
+         <f:ajax listener="#{usedcarlot.model}" render="@this" resetValues="#{usedcarlot.model}"/>
       </h:selectOneMenu>
       <br/>
 
       <h:outputLabel for="minPrice">
          <h:outputText value="Min price: "/>
       </h:outputLabel>
-      <h:inputText id="minPrice" action="#{usedcarlot.minPrice}"/>
+      <h:inputText id="minPrice" binding="#{minPrice}" value="#{usedcarlot.minPrice}" validatorMessage="Wrong min price">
+         <f:ajax event="keyup" render="validationMessages"/>
+      </h:inputText>
       <br/>
 
       <h:outputLabel for="maxPrice">
-         <h:outputText value="Min price: "/>
+         <h:outputText value="Max price: "/>
       </h:outputLabel>
-      <h:inputText id="maxPrice" action="#{usedcarlot.maxPrice}"/><br/>
+      <h:inputText id="maxPrice" binding="#{maxPrice}"  value="#{usedcarlot.maxPrice}" validatorMessage="Wrong max price">
+         <f:ajax event="keyup" render="validationMessages"/>
+      </h:inputText><br/>
 
       <h:outputLabel for="fuelType">
-         <h:outputText value="Min price: "/>
+         <h:outputText value="Fuel type: "/>
       </h:outputLabel>
-      <h:selectOneMenu id="fuelType" value="#{usedcarlot.fuelType}">
-         <f:selectItem itemValue="Diesel"/>
-         <f:selectItem itemValue="Gasoline"/>
+      <h:selectOneMenu id="fuelType" value="#{usedcarlot.fuelType}"  validatorMessage="Please select fuel type">
+         <f:selectItems value="#{usedcarlot.fuelTypes}"/>
       </h:selectOneMenu><br/>
 
       <h:outputLabel for="name">
          <h:outputText value="Enter your name: "/>
       </h:outputLabel>
-      <h:inputText binding="#{name}" required="true" id="name">
+      <h:inputText binding="#{name}" required="true" id="name"  validatorMessage="Please enter your name">
          <f:validateRegex pattern="^[a-zA-Z]+(([' -][a-zA-Z ])?[a-zA-Z]*)*$"/>
          <f:ajax event="keyup" render="submit"/>
       </h:inputText><br/>
@@ -61,13 +69,15 @@
       <h:outputLabel for="phone">
          <h:outputText value="Enter your phone: "/>
       </h:outputLabel>
-      <h:inputText binding="#{phone}" required="true" id="phone">
+      <h:inputText binding="#{phone}" required="true" id="phone"  validatorMessage="Please enter your phone number">
          <f:validateRegex pattern="^([+]?[\d]+)?$"/>
          <f:ajax event="keyup" render="submit"  />
       </h:inputText><br/>
 
-      <h:commandButton type="submit" id="submit" disabled="#{not (name.valid and phone.valid) }" value="Submit"/>
+      <h:commandButton type="submit" id="submit" disabled="#{not (name.valid and phone.valid and minPrice.valid and maxPrice.valid) }" value="Submit" action="#{usedcarlot.result}"/>
       <h:commandButton type="reset" value="Reset"/>
+
+      <h:messages id="validationMessages" styleClass="error"/>
    </h:form>
 </h:body>
 </html>

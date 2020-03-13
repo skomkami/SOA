@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>result</title>
+</h:head>
+
+<body>
+<h:dataTable value = "#{usedcarlot.results}" var = "car">
+<!--             styleClass = "employeeTable"-->
+<!--             headerClass = "employeeTableHeader"-->
+<!--             rowClasses = "employeeTableOddRow,employeeTableEvenRow">-->
+
+    <h:column>
+        <f:facet name = "header">Mark</f:facet>
+        #{car.mark}
+    </h:column>
+
+    <h:column>
+        <f:facet name = "header">Model</f:facet>
+        #{car.model}
+    </h:column>
+
+    <h:column>
+        <f:facet name = "header">Fuel type</f:facet>
+        #{car.fuelType}
+    </h:column>
+
+    <h:column>
+        <f:facet name = "header">Price</f:facet>
+        #{car.price}
+    </h:column>
+</h:dataTable>
+</body>
+</html>
