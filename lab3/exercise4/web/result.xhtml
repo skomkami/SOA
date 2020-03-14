@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Result</title>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+</h:head>
+
+<h:body>
+    <h:dataTable value="#{books.selectedBooks}" var="book">
+        <h:column>
+            <f:facet name = "header">Title</f:facet>
+            #{book.title}
+        </h:column>
+
+        <h:column>
+            <f:facet name = "header">Author</f:facet>
+            #{book.author}
+        </h:column>
+
+        <h:column>
+            <f:facet name = "header">Genre</f:facet>
+            #{book.genre}
+        </h:column>
+
+        <h:column>
+            <f:facet name = "header">Pages</f:facet>
+            #{book.pages}
+        </h:column>
+
+        <h:column>
+            <f:facet name = "header">Price</f:facet>
+            #{book.price}
+        </h:column>
+
+        <h:column>
+            <f:facet name = "header">Currency</f:facet>
+            #{book.currency}
+        </h:column>
+
+    </h:dataTable>
+</h:body>
+</html>

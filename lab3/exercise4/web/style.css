@@ -1,0 +1,16 @@
+.error {color: red}
+td {
+    padding: 18px 20px 14px;
+    text-align: center;
+}
+
+tr:nth-child(even) {background-color: #e3e3e3;}
+
+table {
+    font-family: Montserrat-Regular;
+    font-size: 14px;
+    color: #808080;
+    line-height: 1.4;
+    background-color: #fff;
+    width: 75%;
+}
