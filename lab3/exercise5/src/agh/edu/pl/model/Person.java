@@ -2,6 +2,7 @@ package agh.edu.pl.model;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.swing.text.StyledEditorKit;
 import javax.xml.bind.ValidationException;
 
 public class Person {
@@ -27,7 +28,8 @@ public class Person {
 
     public void setGender(Gender gender) {
         this.gender = gender;
-        setHeight(this.height);
+        if(this.height != null)
+            setHeight(this.height);
     }
 
     public void setEducation(String education) {
@@ -83,4 +85,32 @@ public class Person {
         MALE,
         FEMALE
     }
+
+    private FemaleInfo femaleInfo = new FemaleInfo();
+    private MaleInfo maleInfo = new MaleInfo();
+
+    public FemaleInfo getFemaleInfo() {
+        return femaleInfo;
+    }
+
+    public MaleInfo getMaleInfo() {
+        return maleInfo;
+    }
+
+    public void setFemaleInfo(FemaleInfo femaleInfo) {
+        this.femaleInfo = femaleInfo;
+    }
+
+    public void setMaleInfo(MaleInfo maleInfo) {
+        this.maleInfo = maleInfo;
+    }
+
+    public Boolean getIsFemale() {
+        return this.getGender() != null && this.getGender() == Gender.FEMALE;
+    }
+
+    public Boolean getIsMale() {
+        return this.getGender() != null && this.getGender() == Gender.MALE;
+    }
+
 }
