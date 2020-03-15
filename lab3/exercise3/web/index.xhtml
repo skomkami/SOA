@@ -16,7 +16,7 @@
 </h:head>
 
 <h:body>
-   <h:form method="POST">
+   <h:form>
       <h:outputLabel for="brand">
          <h:outputText value="Choose brand"/>
       </h:outputLabel>
@@ -32,7 +32,6 @@
       <h:selectOneMenu id="model" value="#{usedcarlot.model}" required="true">
          <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
          <f:selectItems value="#{usedcarlot.models}" />
-<!--         <f:ajax listener="#{usedcarlot.model}" render="validationMessages"/>-->
       </h:selectOneMenu>
       <br/>
 
@@ -54,8 +53,12 @@
       <h:outputLabel for="fuelType">
          <h:outputText value="Fuel type: "/>
       </h:outputLabel>
-      <h:selectOneMenu id="fuelType" value="#{usedcarlot.fuelType}"  validatorMessage="Please select fuel type">
+      <h:selectOneMenu id="fuelType" value="#{usedcarlot.fuelType}"
+                       valueChangeListener="#{usedcarlot.updateFuelType}"
+                       validatorMessage="Please select fuel type">
+         <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
          <f:selectItems value="#{usedcarlot.fuelTypes}"/>
+         <f:ajax reRender="@this"/>
       </h:selectOneMenu><br/>
 
       <h:outputLabel for="name">
@@ -78,13 +81,15 @@
       <h:commandButton type="submit" id="submit" disabled="#{not (name.valid and phone.valid and minPrice.valid and maxPrice.valid) }" value="Submit">
          <f:ajax listener="#{usedcarlot.applyFilters}" render="resultsTable"/>
       </h:commandButton>
-      <h:commandButton type="reset" value="Reset"/>
+      <h:commandButton type="reset" value="Reset">
+         <f:ajax listener="#{usedcarlot.clear}" render="resultsTable @form"/>
+      </h:commandButton>
 
       <h:messages id="validationMessages" styleClass="error"/>
    </h:form>
 
-   <h:panelGroup id="resultsTable" rendered="${usedcarlot.resultReady}">
-      <h:dataTable value = "#{usedcarlot.results}" var = "car">
+   <h:panelGroup id="resultsTable">
+      <h:dataTable value = "#{usedcarlot.results}" var = "car" rendered="#{usedcarlot.resultReady}">
          <h:column>
             <f:facet name = "header">Mark</f:facet>
             #{car.mark}
