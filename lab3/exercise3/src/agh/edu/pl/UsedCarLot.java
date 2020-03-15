@@ -2,20 +2,29 @@ package agh.edu.pl;
 
 import agh.edu.pl.model.Car;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
+import javax.faces.event.PhaseEvent;
+import javax.faces.event.PhaseId;
+import javax.faces.event.PhaseListener;
+import javax.faces.event.ValueChangeEvent;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
 @ManagedBean(name = "usedcarlot")
-@SessionScoped
+@ViewScoped
 public class UsedCarLot implements Serializable {
     private String mark;
     private String model;
     private Car.FuelType fuelType;
+    private Boolean resultReady;
+    private ArrayList<Car> results;
 
     public void setFuelType(Car.FuelType fuelType) {
         this.fuelType = fuelType;
@@ -39,6 +48,7 @@ public class UsedCarLot implements Serializable {
 
     public UsedCarLot() {
         this.models = new ArrayList<>();
+        this.resultReady = false;
     }
 
     public Integer getMaxPrice() {
@@ -90,11 +100,11 @@ public class UsedCarLot implements Serializable {
         return Car.FuelType.values();
     }
 
-    public String result() {
-        return "results";
+    public Boolean getResultReady() {
+        return this.resultReady;
     }
 
-    public ArrayList<Car> getResults() {
+    public void applyFilters() {
         Stream<Car> cars = Car.cars
                 .stream()
                 .filter(car -> car.mark.equals(this.mark))
@@ -104,7 +114,28 @@ public class UsedCarLot implements Serializable {
             cars = cars.filter(car -> car.price >= this.minPrice);
         if(this.maxPrice != null)
             cars = cars.filter(car -> car.price <= this.maxPrice);
+        if(this.fuelType != null)
+            cars = cars.filter(car -> car.getFuelType() == this.fuelType);
 
-        return cars.collect(Collectors.toCollection(ArrayList::new));
+        this.results = cars.collect(Collectors.toCollection(ArrayList::new));
+        this.resultReady = true;
+    }
+
+    public void updateFuelType(ValueChangeEvent e) {
+        setFuelType( Car.FuelType.valueOf(e.getNewValue().toString()));
+    }
+    public ArrayList<Car> getResults() {
+        return results;
+    }
+
+    public void clear(){
+        this.results = new ArrayList<>();
+        this.resultReady = false;
+        this.model = null;
+        this.mark = null;
+        this.minPrice = null;
+        this.maxPrice = null;
+        this.fuelType = null;
+        this.models =  new ArrayList<>();
     }
 }

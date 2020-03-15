@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+   <title>Survey</title>
+   <link rel="stylesheet" type="text/css" href="style.css"/>
+</h:head>
+
+<h:body>
+   <h:form id="mainSurvey">
+      <h:outputLabel for="name">
+         Enter your name:
+      </h:outputLabel>
+      <h:inputText required="true" id="name" value="#{survey.person.name}">
+         <f:ajax event="keyup" reRender="@this" render="validationMessages"/>
+      </h:inputText><br/>
+
+      <h:outputLabel for="email">
+         Enter your email:
+      </h:outputLabel>
+      <h:inputText id="email" value="#{survey.person.email}" required="true">
+         <f:validateRegex pattern="[^@]+@[^\.]+\..+"/>
+         <f:ajax event="keyup" reRender="@this" render="validationMessages"/>
+      </h:inputText><br/>
+
+      <h:outputLabel for="gender">
+         Enter your gender:
+      </h:outputLabel>
+      <h:selectOneMenu id="gender" value="#{survey.person.gender}" required="true">
+         <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+         <f:selectItems value="#{survey.genders}"/>
+         <f:ajax event="change" render="height validationMessages"/>
+      </h:selectOneMenu><br/>
+
+      <h:outputLabel for="age">
+         Enter your age:
+      </h:outputLabel>
+      <h:inputText id="age" value="#{survey.person.age}">
+         <f:validateLongRange minimum="10" maximum="100" />
+         <f:ajax event="keyup" reRender="@this" render="validationMessages"/>
+      </h:inputText><br/>
+
+      <h:outputLabel for="height">
+         Enter your height:
+      </h:outputLabel>
+      <h:inputText id="height" value="#{survey.person.height}">
+         <f:ajax event="keyup" reRender="@this" render="validationMessages"/>
+      </h:inputText><br/>
+
+      <h:commandButton type="submit" value="Submit survey">
+      </h:commandButton><br/>
+
+      <h:messages id="validationMessages" styleClass="error"/>
+   </h:form>
+</h:body>
+</html>
