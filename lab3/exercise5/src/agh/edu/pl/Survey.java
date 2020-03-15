@@ -10,20 +10,20 @@ import java.io.Serializable;
 @ManagedBean(name = "survey")
 @ViewScoped
 public class Survey implements Serializable {
-    @ManagedProperty(value="#{banner}")
-    private Banner banner;
-
-    public void setBanner(Banner banner) {
-        this.banner = banner;
-    }
-
-    public void incrementClicks() {
-        banner.incrementClicks();
-    }
-
-    public int getClicks() {
-        return banner.getClicks();
-    }
+//    @ManagedProperty(value="#{banner}")
+//    private Banner banner;
+//
+//    public void setBanner(Banner banner) {
+//        this.banner = banner;
+//    }
+//
+//    public void incrementClicks() {
+//        banner.incrementClicks();
+//    }
+//
+//    public int getClicks() {
+//        return banner.getClicks();
+//    }
 
     private Person person;
 

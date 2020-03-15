@@ -16,4 +16,8 @@ public class Banner implements Serializable {
     public void incrementClicks() {
         ++this.clicks;
     }
+
+    public Integer getRandomAd() {
+        return (int)(Math.random() * 5 + 1);
+    }
 }

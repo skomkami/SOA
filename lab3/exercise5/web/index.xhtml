@@ -11,6 +11,15 @@
 </h:head>
 
 <h:body>
+
+   <h:panelGroup layout="block" id="banner">
+      <h:commandLink style="display:block;">
+         <f:ajax event="click" listener="#{banner.incrementClicks}" render="bannerClicks"/>
+         <h1>Banner #{banner.randomAd}</h1>
+      </h:commandLink>
+       <h:outputText id="bannerClicks" value="Number of clicks: #{banner.clicks}"/>
+   </h:panelGroup><br/><br/>
+
    <h:form id="mainSurvey">
       <h:outputLabel for="name">
          Enter your name:
