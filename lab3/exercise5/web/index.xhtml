@@ -42,13 +42,13 @@
       <h:selectOneMenu id="gender" value="#{survey.person.gender}" required="true">
          <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
          <f:selectItems value="#{survey.genders}"/>
-         <f:ajax event="change" render="height validationMessages femaleInfo maleInfo"/>
+         <f:ajax event="change" render="height validationMessages femaleInfo maleInfo additionalInformation"/>
       </h:selectOneMenu><br/>
 
       <h:outputLabel for="age">
          Enter your age:
       </h:outputLabel>
-      <h:inputText id="age" value="#{survey.person.age}">
+      <h:inputText id="age" value="#{survey.person.age}" required="true">
          <f:validateLongRange minimum="10" maximum="100" />
          <f:ajax event="keyup" reRender="@this" render="validationMessages"/>
       </h:inputText><br/>
@@ -56,7 +56,7 @@
       <h:outputLabel for="height">
          Enter your height:
       </h:outputLabel>
-      <h:inputText id="height" value="#{survey.person.height}">
+      <h:inputText id="height" value="#{survey.person.height}" required="true">
          <f:ajax event="keyup" reRender="@this" render="validationMessages"/>
       </h:inputText><br/><br/>
 
@@ -67,7 +67,7 @@
             <h:outputLabel for="bustSize">
                Enter your bust size:
             </h:outputLabel>
-            <h:inputText id="bustSize" value="#{survey.person.femaleInfo.bustSize}">
+            <h:inputText id="bustSize" value="#{survey.person.femaleInfo.bustSize}" required="true">
                <f:validateLongRange/>
                <f:ajax event="keyup" reRender="@this" render="validationMessages"/>
             </h:inputText><br/>
@@ -75,7 +75,7 @@
             <h:outputLabel for="cupSize">
                Select your cup size:
             </h:outputLabel>
-            <h:selectOneMenu id="cupSize" value="#{survey.person.femaleInfo.cupSize}">
+            <h:selectOneMenu id="cupSize" value="#{survey.person.femaleInfo.cupSize}" required="true">
                <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
                <f:selectItems value="#{survey.person.femaleInfo.cupSizes}"/>
                <f:ajax event="change" render="validationMessages"/>
@@ -84,7 +84,7 @@
             <h:outputLabel for="femaleWaist">
                Enter your waist size:
             </h:outputLabel>
-            <h:inputText id="femaleWaist" value="#{survey.person.femaleInfo.waist}">
+            <h:inputText id="femaleWaist" value="#{survey.person.femaleInfo.waist}" required="true">
                <f:validateLongRange/>
                <f:ajax event="keyup" reRender="@this" render="validationMessages"/>
             </h:inputText><br/>
@@ -92,7 +92,7 @@
             <h:outputLabel for="hips">
                Enter your waist size:
             </h:outputLabel>
-            <h:inputText id="hips" value="#{survey.person.femaleInfo.hips}">
+            <h:inputText id="hips" value="#{survey.person.femaleInfo.hips}" required="true">
                <f:validateLongRange/>
                <f:ajax event="keyup" reRender="@this" render="validationMessages"/>
             </h:inputText><br/>
@@ -106,7 +106,7 @@
             <h:outputLabel for="maleChest">
                Enter your chest size:
             </h:outputLabel>
-            <h:inputText id="maleChest" value="#{survey.person.maleInfo.chest}">
+            <h:inputText id="maleChest" value="#{survey.person.maleInfo.chest}" required="true">
                <f:validateLongRange/>
                <f:ajax event="keyup" reRender="@this" render="validationMessages"/>
             </h:inputText><br/>
@@ -115,14 +115,66 @@
             <h:outputLabel for="maleWaist">
                Enter your waist size:
             </h:outputLabel>
-            <h:inputText id="maleWaist" value="#{survey.person.maleInfo.waist}">
+            <h:inputText id="maleWaist" value="#{survey.person.maleInfo.waist}" required="true">
                <f:validateLongRange/>
                <f:ajax event="keyup" reRender="@this" render="validationMessages"/>
             </h:inputText><br/>
          </h:panelGroup>
       </h:panelGroup>
 
-      <h:commandButton type="submit" value="Submit survey">
+<!--      Additional info     -->
+
+      <h:panelGroup id="additionalInformation">
+         <h2>Additional information</h2>
+
+         <h:outputLabel for="budget">
+            Plese, select your budget:
+         </h:outputLabel>
+         <h:selectOneMenu id="budget" value="#{survey.budget}" required="true">
+            <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+            <f:selectItem itemValue="VERY_LOW" itemLabel="under 100" />
+            <f:selectItem itemValue="LOW" itemLabel="between 100 and 500" />
+            <f:selectItem itemValue="HIGH" itemLabel="between 500 and 1000" />
+            <f:selectItem itemValue="VERY_HIGH" itemLabel="over 1000" />
+            <f:ajax event="change" render="validationMessages"/>
+         </h:selectOneMenu><br/>
+
+         <h:outputLabel for="freq">
+            Plese, tell us how often you go shopping:
+         </h:outputLabel>
+         <h:selectOneMenu id="freq" value="#{survey.frequency}" required="true">
+            <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+            <f:selectItems value="#{survey.frequencies}"/>
+            <f:ajax event="change" render="height validationMessages"/>
+         </h:selectOneMenu><br/>
+
+         <h:outputLabel for="colors">
+            Which colors your prefer:
+         </h:outputLabel><br/>
+         <h:selectManyListbox id="colors" value = "#{survey.colors}">
+            <f:selectItems value="#{survey.colorsValues}"/>
+            <f:ajax event="change" render="validationMessages"/>
+         </h:selectManyListbox><br/>
+
+         <h:outputLabel for="femaleClothes" rendered="#{survey.person.isFemale}">
+            Which clothes your prefer:
+         </h:outputLabel><br/>
+         <h:selectManyListbox id="femaleClothes" value = "#{survey.clothes}" rendered="#{survey.person.isFemale}">
+            <f:selectItems value="#{survey.femaleClothes}"/>
+            <f:ajax event="change" render="validationMessages"/>
+         </h:selectManyListbox><br/>
+
+         <h:outputLabel for="maleClothes" rendered="#{survey.person.isMale}">
+            Which clothes your prefer:
+         </h:outputLabel><br/>
+         <h:selectManyListbox id="maleClothes" value = "#{survey.clothes}" rendered="#{survey.person.isMale}">
+            <f:selectItems value="#{survey.maleClothes}"/>
+            <f:ajax event="change" render="validationMessages"/>
+         </h:selectManyListbox><br/>
+
+      </h:panelGroup>
+
+      <h:commandButton type="submit" value="Submit survey" action="${survey.addSurvey()}">
       </h:commandButton><br/>
 
       <h:messages id="validationMessages" styleClass="error"/>

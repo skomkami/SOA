@@ -1,8 +1,6 @@
 package agh.edu.pl.model;
 
-import javax.faces.event.AjaxBehaviorEvent;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 public class Book {
     private Integer id;
