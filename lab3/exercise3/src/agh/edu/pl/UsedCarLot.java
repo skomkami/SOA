@@ -3,15 +3,15 @@ package agh.edu.pl;
 import agh.edu.pl.model.Car;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.bean.SessionScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@RequestScoped
+
 @ManagedBean(name = "usedcarlot")
+@SessionScoped
 public class UsedCarLot implements Serializable {
     private String mark;
     private String model;
@@ -38,8 +38,7 @@ public class UsedCarLot implements Serializable {
     }
 
     public UsedCarLot() {
-        this.models = Car.cars.stream().map(car -> car.model).distinct().collect(Collectors.toCollection(ArrayList::new));
-        models.add("");
+        this.models = new ArrayList<>();
     }
 
     public Integer getMaxPrice() {
@@ -72,6 +71,7 @@ public class UsedCarLot implements Serializable {
 
     public void setMark(String mark) {
         this.mark = mark;
+        update();
     }
 
     public void setModel(String model) {
