@@ -8,6 +8,7 @@ import pl.edu.agh.exceptions.NotEnoughFundsException;
 import pl.edu.agh.exceptions.SeatAlreadyOccupiedException;
 import pl.edu.agh.exceptions.SeatNotFoundException;
 import pl.edu.agh.model.Seat;
+import pl.edu.agh.model.User;
 
 import javax.ejb.EJB;
 import javax.ejb.Lock;
@@ -35,6 +36,11 @@ public class SeatsManager implements ISeatsManagerRemote {
     @Override
     public int getSeatPrice(int seatNumber) throws SeatNotFoundException {
         return seatsService.getSeatById(seatNumber).getPrice();
+    }
+
+    @Override
+    public void setUserForTransaction(User userForTransaction) {
+        ticketService.setUser(userForTransaction);
     }
 
     @Override

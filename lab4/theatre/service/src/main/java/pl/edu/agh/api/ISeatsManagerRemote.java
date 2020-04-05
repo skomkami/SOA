@@ -4,6 +4,7 @@ import pl.edu.agh.exceptions.NotEnoughFundsException;
 import pl.edu.agh.exceptions.SeatAlreadyOccupiedException;
 import pl.edu.agh.exceptions.SeatNotFoundException;
 import pl.edu.agh.model.Seat;
+import pl.edu.agh.model.User;
 
 import javax.ejb.Remote;
 import java.util.ArrayList;
@@ -15,5 +16,7 @@ public interface ISeatsManagerRemote {
     int getSeatPrice(int seatNumber) throws SeatNotFoundException;
 
     void buyTicket(int seatNumber) throws SeatNotFoundException, SeatAlreadyOccupiedException, NotEnoughFundsException;
+
+    void setUserForTransaction(User userForTransaction);
 }
 

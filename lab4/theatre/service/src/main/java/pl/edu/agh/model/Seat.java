@@ -13,6 +13,12 @@ public class Seat implements Serializable {
         this.price = price;
     }
 
+    public Seat(int number, int price, boolean occupied) {
+        this.number = number;
+        this.price = price;
+        this.occupied = occupied;
+    }
+
     public void setOccupied(boolean occupied) {
         this.occupied = occupied;
     }

@@ -5,6 +5,7 @@ import pl.edu.agh.api.ISeatsManagerRemote;
 import pl.edu.agh.api.ITicketsServiceRemote;
 import pl.edu.agh.api.IUsersServiceRemote;
 import pl.edu.agh.exceptions.SeatAlreadyOccupiedException;
+import pl.edu.agh.exceptions.SeatNotFoundException;
 import pl.edu.agh.model.User;
 
 import javax.ejb.EJB;
@@ -19,15 +20,11 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 @ManagedBean(name = "usersession")
-@Stateful
 @SessionScoped
 public class UserSession implements Serializable {
 
     @EJB
     private IUsersServiceRemote usersService;
-
-    @EJB
-    private ITicketsServiceRemote ticketService;
 
     @EJB
     private ISeatsManagerRemote seatsManager;
@@ -65,7 +62,7 @@ public class UserSession implements Serializable {
 
         if(user != null) {
             sessionUser = user;
-            ticketService.setUser(sessionUser);
+            seatsManager.setUserForTransaction(sessionUser);
             return "seats_booking";
         } else {
             FacesMessage message = new FacesMessage("Wrong credentials");
@@ -81,8 +78,19 @@ public class UserSession implements Serializable {
 
     private Integer seatNumber;
 
-    public void setSeatNumber(Integer seatNumber) {
+    public void setSeatNumber(Integer seatNumber) throws SeatNotFoundException {
         this.seatNumber = seatNumber;
+        try {
+            if(!seatsAvailability.isSeatAvailable(seatNumber)) {
+                FacesMessage message = new FacesMessage("Seat already occupied");
+                message.setSeverity(FacesMessage.SEVERITY_ERROR);
+                FacesContext.getCurrentInstance().addMessage("Selection error", message);
+            }
+        } catch (Exception e) {
+            FacesMessage message = new FacesMessage(e.getMessage());
+            message.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("Selection error", message);
+        }
     }
 
     public Integer getSeatNumber() {
@@ -115,7 +123,7 @@ public class UserSession implements Serializable {
 
     public String logOut() {
         this.sessionUser = null;
-        ticketService.setUser(null);
+        seatsManager.setUserForTransaction(null);
         return "index.xhtml";
     }
 }

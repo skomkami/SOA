@@ -11,9 +11,9 @@ public class UsersRepository {
     public UsersRepository() {
         users.addAll(
                 Arrays.asList(
-                        new User("James Delaney", "jdelaney", 100),
-                        new User("Thomas Shelby", "tshelby", 100),
-                        new User("Walter White", "wwhite", 80)
+                        new User("jdelaney", "jdelaney", 100),
+                        new User("tshelby", "tshelby", 100),
+                        new User("wwhite", "wwhite", 80)
                 )
         );
     }
