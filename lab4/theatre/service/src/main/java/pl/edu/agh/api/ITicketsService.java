@@ -3,10 +3,10 @@ package pl.edu.agh.api;
 import pl.edu.agh.exceptions.NotEnoughFundsException;
 import pl.edu.agh.model.User;
 
-import javax.ejb.Remote;
+import javax.ejb.Local;
 
-@Remote
-public interface ITicketsServiceRemote {
+@Local
+public interface ITicketsService {
 
     void charge(int amount) throws NotEnoughFundsException;
 

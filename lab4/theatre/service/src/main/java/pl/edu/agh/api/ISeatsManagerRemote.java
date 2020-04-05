@@ -15,6 +15,10 @@ public interface ISeatsManagerRemote {
 
     int getSeatPrice(int seatNumber) throws SeatNotFoundException;
 
+    User userWithCredentials(String login, String password);
+
+    Integer getUserBalance();
+
     void buyTicket(int seatNumber) throws SeatNotFoundException, SeatAlreadyOccupiedException, NotEnoughFundsException;
 
     void setUserForTransaction(User userForTransaction);

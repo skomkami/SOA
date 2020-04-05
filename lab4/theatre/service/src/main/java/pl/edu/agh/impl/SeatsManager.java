@@ -1,9 +1,9 @@
 package pl.edu.agh.impl;
 
-import pl.edu.agh.api.ISeatsAvailabilityServiceRemote;
 import pl.edu.agh.api.ISeatsManagerRemote;
-import pl.edu.agh.api.ISeatsServiceRemote;
-import pl.edu.agh.api.ITicketsServiceRemote;
+import pl.edu.agh.api.ISeatsService;
+import pl.edu.agh.api.ITicketsService;
+import pl.edu.agh.api.IUsersService;
 import pl.edu.agh.exceptions.NotEnoughFundsException;
 import pl.edu.agh.exceptions.SeatAlreadyOccupiedException;
 import pl.edu.agh.exceptions.SeatNotFoundException;
@@ -20,13 +20,22 @@ import java.util.ArrayList;
 public class SeatsManager implements ISeatsManagerRemote {
 
     @EJB
-    private ITicketsServiceRemote ticketService;
+    private ITicketsService ticketService;
 
     @EJB
-    private ISeatsServiceRemote seatsService;
+    private ISeatsService seatsService;
 
     @EJB
-    private ISeatsAvailabilityServiceRemote seatsAvailability;
+    private IUsersService usersService;
+
+//    @EJB
+//    private ISeatsAvailabilityServiceRemote seatsAvailability;
+
+
+    @Override
+    public User userWithCredentials(String login, String password) {
+        return usersService.userWithCredentials(login, password);
+    }
 
     @Override
     public ArrayList<Seat> getSeatList() {
@@ -44,12 +53,17 @@ public class SeatsManager implements ISeatsManagerRemote {
     }
 
     @Override
+    public Integer getUserBalance() {
+        return ticketService.getUser().getBalance();
+    }
+
+    @Override
     public void buyTicket(int seatNumber) throws SeatNotFoundException, SeatAlreadyOccupiedException, NotEnoughFundsException {
         Seat seat = seatsService.getSeatById(seatNumber);
         if(seat.isOccupied())
             throw new SeatAlreadyOccupiedException();
-        seat.setOccupied(true);
 
         ticketService.charge(seat.getPrice());
+        seat.setOccupied(true);
     }
 }

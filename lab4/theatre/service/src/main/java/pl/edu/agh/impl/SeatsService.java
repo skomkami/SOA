@@ -1,6 +1,6 @@
 package pl.edu.agh.impl;
 
-import pl.edu.agh.api.ISeatsServiceRemote;
+import pl.edu.agh.api.ISeatsService;
 import pl.edu.agh.exceptions.SeatNotFoundException;
 import pl.edu.agh.model.Seat;
 import pl.edu.agh.repos.SeatsRepository;
@@ -9,7 +9,7 @@ import javax.ejb.Singleton;
 import java.util.ArrayList;
 
 @Singleton
-public class SeatsService implements ISeatsServiceRemote {
+public class SeatsService implements ISeatsService {
 
     private SeatsRepository seatsRepository;
 

@@ -1,6 +1,6 @@
 package pl.edu.agh.impl;
 
-import pl.edu.agh.api.IUsersServiceRemote;
+import pl.edu.agh.api.IUsersService;
 import pl.edu.agh.model.User;
 import pl.edu.agh.repos.UsersRepository;
 
@@ -8,7 +8,7 @@ import javax.ejb.Singleton;
 import java.util.ArrayList;
 
 @Singleton
-public class UsersService implements IUsersServiceRemote {
+public class UsersService implements IUsersService {
 
     private UsersRepository usersRepository;
 

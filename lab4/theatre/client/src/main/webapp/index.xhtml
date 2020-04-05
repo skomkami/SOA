@@ -16,18 +16,18 @@
         <h:outputLabel for="login">
             Enter your login:
         </h:outputLabel>
-        <h:inputText required="true" id="login" value="#{usersession.login}">
+        <h:inputText required="true" id="login" value="#{UserSession.login}">
             <f:ajax event="keyup" reRender="@this" render="validationMessages"/>
         </h:inputText><br/>
 
         <h:outputLabel for="password">
             Enter your password:
         </h:outputLabel>
-        <h:inputSecret required="true" id="password" value="#{usersession.password}">
+        <h:inputSecret required="true" id="password" value="#{UserSession.password}">
             <f:ajax event="keyup" reRender="@this" render="validationMessages"/>
         </h:inputSecret><br/>
 
-        <h:commandButton type="submit" value="Login" action="${usersession.logIn()}">
+        <h:commandButton type="submit" value="Login" action="${UserSession.logIn()}">
         </h:commandButton><br/>
         <h:messages id="validationMessages" styleClass="error"/>
     </h:form>

@@ -9,21 +9,22 @@
     <title>Theater</title>
     <link rel="stylesheet" type="text/css" href="style.css"/>
     <f:metadata>
-        <f:viewAction action="#{usersession.checkLogin}" />
+        <f:viewAction action="#{UserSession.checkLogin}" />
     </f:metadata>
 </h:head>
 <h:body>
-    <p>Your balance: <h:outputText value="#{usersession.sessionUser.balance}"/></p><br/>
+    <p>Your balance: <h:outputText id="balance" value="#{UserSession.userBalance}"/></p><br/>
 
     <h:form>
 
-        <h:selectOneMenu id="seat" value="#{usersession.seatNumber}" required="true">
+        <h:selectOneMenu id="seat" value="#{UserSession.seatNumber}" required="true">
             <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-            <f:selectItems value="#{usersession.seats}"/>
+            <f:selectItems value="#{UserSession.seats}"/>
             <f:ajax event="change" render="validationMessages"/>
         </h:selectOneMenu><br/>
 
-        <h:commandButton type="submit" value="Buy ticket" action="${usersession.buy()}">
+        <h:commandButton type="submit" value="Buy ticket" action="#{UserSession.buy}">
+            <f:ajax event="click" render="balance"></f:ajax>
         </h:commandButton><br/>
 
         <h:messages id="validationMessages" styleClass="error"/>
@@ -32,7 +33,7 @@
     <br/>
 
     <h:form>
-        <h:commandButton value="Log out" type="submit" action="#{usersession.logOut}" />
+        <h:commandButton value="Log out" type="submit" action="#{UserSession.logOut}" />
     </h:form>
 
 </h:body>

@@ -2,29 +2,22 @@ package pl.edu.agh;
 
 import pl.edu.agh.api.ISeatsAvailabilityServiceRemote;
 import pl.edu.agh.api.ISeatsManagerRemote;
-import pl.edu.agh.api.ITicketsServiceRemote;
-import pl.edu.agh.api.IUsersServiceRemote;
 import pl.edu.agh.exceptions.SeatAlreadyOccupiedException;
-import pl.edu.agh.exceptions.SeatNotFoundException;
 import pl.edu.agh.model.User;
 
 import javax.ejb.EJB;
-import javax.ejb.Stateful;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
+import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-@ManagedBean(name = "usersession")
+@Named("UserSession")
 @SessionScoped
 public class UserSession implements Serializable {
-
-    @EJB
-    private IUsersServiceRemote usersService;
 
     @EJB
     private ISeatsManagerRemote seatsManager;
@@ -58,7 +51,7 @@ public class UserSession implements Serializable {
     }
 
     public String logIn() throws ValidatorException {
-        User user = usersService.userWithCredentials(login, password);
+        User user = seatsManager.userWithCredentials(login, password);
 
         if(user != null) {
             sessionUser = user;
@@ -78,7 +71,7 @@ public class UserSession implements Serializable {
 
     private Integer seatNumber;
 
-    public void setSeatNumber(Integer seatNumber) throws SeatNotFoundException {
+    public void setSeatNumber(Integer seatNumber) {
         this.seatNumber = seatNumber;
         try {
             if(!seatsAvailability.isSeatAvailable(seatNumber)) {
@@ -106,7 +99,6 @@ public class UserSession implements Serializable {
                 throw new SeatAlreadyOccupiedException();
 
             seatsManager.buyTicket(seatNumber);
-
         } catch (Exception e) {
             FacesMessage message = new FacesMessage(e.getMessage());
             message.setSeverity(FacesMessage.SEVERITY_ERROR);
@@ -115,10 +107,14 @@ public class UserSession implements Serializable {
 
     }
 
+    public Integer getUserBalance() {
+        return seatsManager.getUserBalance();
+    }
+
     public String checkLogin() {
         if(this.getSessionUser() == null)
             return "index.xhtml";
-        else return "";
+        else return null;
     }
 
     public String logOut() {
