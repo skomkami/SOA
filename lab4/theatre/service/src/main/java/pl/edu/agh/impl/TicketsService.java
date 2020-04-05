@@ -1,6 +1,6 @@
 package pl.edu.agh.impl;
 
-import pl.edu.agh.api.ITicketsService;
+import pl.edu.agh.ITicketsService;
 import pl.edu.agh.exceptions.NotEnoughFundsException;
 import pl.edu.agh.model.User;
 

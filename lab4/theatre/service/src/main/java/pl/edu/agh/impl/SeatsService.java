@@ -1,6 +1,6 @@
 package pl.edu.agh.impl;
 
-import pl.edu.agh.api.ISeatsService;
+import pl.edu.agh.ISeatsService;
 import pl.edu.agh.exceptions.SeatNotFoundException;
 import pl.edu.agh.model.Seat;
 import pl.edu.agh.repos.SeatsRepository;

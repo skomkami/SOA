@@ -1,7 +1,6 @@
 package pl.edu.agh;
 
-import pl.edu.agh.api.ISeatsAvailabilityServiceRemote;
-import pl.edu.agh.api.ISeatsManagerRemote;
+
 import pl.edu.agh.exceptions.SeatAlreadyOccupiedException;
 import pl.edu.agh.model.User;
 

@@ -1,4 +1,4 @@
-package pl.edu.agh.api;
+package pl.edu.agh;
 
 import pl.edu.agh.exceptions.NotEnoughFundsException;
 import pl.edu.agh.exceptions.SeatAlreadyOccupiedException;

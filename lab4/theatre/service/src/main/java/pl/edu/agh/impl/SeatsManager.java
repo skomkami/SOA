@@ -1,9 +1,9 @@
 package pl.edu.agh.impl;
 
-import pl.edu.agh.api.ISeatsManagerRemote;
-import pl.edu.agh.api.ISeatsService;
-import pl.edu.agh.api.ITicketsService;
-import pl.edu.agh.api.IUsersService;
+import pl.edu.agh.ISeatsManagerRemote;
+import pl.edu.agh.ISeatsService;
+import pl.edu.agh.ITicketsService;
+import pl.edu.agh.IUsersService;
 import pl.edu.agh.exceptions.NotEnoughFundsException;
 import pl.edu.agh.exceptions.SeatAlreadyOccupiedException;
 import pl.edu.agh.exceptions.SeatNotFoundException;

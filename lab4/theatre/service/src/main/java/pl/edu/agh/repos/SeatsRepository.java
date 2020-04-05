@@ -1,6 +1,5 @@
 package pl.edu.agh.repos;
 
-import pl.edu.agh.exceptions.SeatNotFoundException;
 import pl.edu.agh.model.Seat;
 import java.util.ArrayList;
 import java.util.Arrays;

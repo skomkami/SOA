@@ -1,7 +1,7 @@
 package pl.edu.agh.impl;
 
-import pl.edu.agh.api.ISeatsAvailabilityServiceRemote;
-import pl.edu.agh.api.ISeatsService;
+import pl.edu.agh.ISeatsAvailabilityServiceRemote;
+import pl.edu.agh.ISeatsService;
 import pl.edu.agh.exceptions.SeatNotFoundException;
 import pl.edu.agh.model.Seat;
 

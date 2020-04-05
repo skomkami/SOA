@@ -1,6 +1,6 @@
 package pl.edu.agh.impl;
 
-import pl.edu.agh.api.IUsersService;
+import pl.edu.agh.IUsersService;
 import pl.edu.agh.model.User;
 import pl.edu.agh.repos.UsersRepository;
 
