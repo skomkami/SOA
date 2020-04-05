@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+
+</h:head>
+<h:body>
+    <h:form action="TheaterPage">
+        <h:outputLabel for="login">
+            Enter your login:
+        </h:outputLabel>
+        <h:inputText required="true" id="login" value="#{usersession.login}">
+            <f:ajax event="keyup" reRender="@this" render="validationMessages"/>
+        </h:inputText><br/>
+
+        <h:outputLabel for="password">
+            Enter your password:
+        </h:outputLabel>
+        <h:inputSecret required="true" id="password" value="#{usersession.password}">
+            <f:ajax event="keyup" reRender="@this" render="validationMessages"/>
+        </h:inputSecret><br/>
+
+        <h:commandButton type="submit" value="Login" action="${usersession.logIn()}">
+        </h:commandButton><br/>
+        <h:messages id="validationMessages" styleClass="error"/>
+    </h:form>
+
+</h:body>
+</html>
