@@ -4,9 +4,13 @@ import agh.edu.pl.model.*;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIInput;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Stream;
 
 @ManagedBean(name = "survey")
 @SessionScoped
@@ -28,6 +32,38 @@ public class Survey implements Serializable {
 
     public Person.Gender[] getGenders() {
         return Person.Gender.values();
+    }
+
+    public boolean isBasicPartValid() {
+        UIViewRoot view = FacesContext.getCurrentInstance().getViewRoot();
+        Set<Map.Entry<String, Object>> componentStream = view.getViewMap().entrySet();
+        boolean baseCommon = componentStream
+                .stream()
+                .filter( e -> e.getKey().startsWith("baseCommon"))
+                .map(e -> ((UIInput)e.getValue()).isValid())
+                .reduce(true, (a,b) -> a && b );
+
+        if ( baseCommon ) {
+            if ( this.person.getIsFemale() ) {
+                return componentStream
+                        .stream()
+                        .filter( e -> e.getKey().startsWith("baseFemale"))
+                        .map(e -> ((UIInput)e.getValue()).isValid())
+                        .reduce(true, (a,b) -> a && b );
+            } else {
+                return componentStream
+                        .stream()
+                        .filter( e -> e.getKey().startsWith("baseMale"))
+                        .map(e -> ((UIInput)e.getValue()).isValid())
+                        .reduce(true, (a,b) -> a && b );
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public Education[] getEducations() {
+        return Education.values();
     }
 
     private Colors[] colors;

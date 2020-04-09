@@ -3,3 +3,17 @@
 #additionalInformation{
     margin-top: 20px;
 }
+
+td {
+    padding: 5px;
+    text-align: center;
+}
+
+tr:nth-child(even) {background-color: #e3e3e3;}
+
+table {
+    font-family: Montserrat-Regular;
+    font-size: 14px;
+    color: #808080;
+    background-color: #fff;
+}

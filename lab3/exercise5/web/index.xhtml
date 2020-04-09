@@ -21,42 +21,51 @@
    </h:panelGroup><br/><br/>
 
    <h:form id="mainSurvey">
-      <h:outputLabel for="name">
+      <h:outputLabel for="baseCommonName">
          Enter your name:
       </h:outputLabel>
-      <h:inputText required="true" id="name" value="#{survey.person.name}">
+      <h:inputText required="true" id="baseCommonName" bind="baseCommonName" value="#{survey.person.name}">
          <f:ajax event="keyup" reRender="@this" render="validationMessages"/>
       </h:inputText><br/>
 
-      <h:outputLabel for="email">
+      <h:outputLabel for="baseCommonEmail">
          Enter your email:
       </h:outputLabel>
-      <h:inputText id="email" value="#{survey.person.email}" required="true">
+      <h:inputText id="baseCommonEmail" value="#{survey.person.email}" required="true">
          <f:validateRegex pattern="[^@]+@[^\.]+\..+"/>
          <f:ajax event="keyup" reRender="@this" render="validationMessages"/>
       </h:inputText><br/>
 
-      <h:outputLabel for="gender">
-         Enter your gender:
+      <h:outputLabel for="baseCommonGender">
+         Select your gender:
       </h:outputLabel>
-      <h:selectOneMenu id="gender" value="#{survey.person.gender}" required="true">
+      <h:selectOneMenu id="baseCommonGender" value="#{survey.person.gender}" required="true">
          <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
          <f:selectItems value="#{survey.genders}"/>
-         <f:ajax event="change" render="height validationMessages femaleInfo maleInfo additionalInformation"/>
+         <f:ajax event="change" render="baseCommonHeight validationMessages femaleInfo maleInfo additionalInformation"/>
       </h:selectOneMenu><br/>
 
-      <h:outputLabel for="age">
+      <h:outputLabel for="baseCommonEducation">
+         Select your education:
+      </h:outputLabel>
+      <h:selectOneMenu id="baseCommonEducation" value="#{survey.person.education}" required="true">
+         <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+         <f:selectItems value="#{survey.educations}"/>
+         <f:ajax event="change" render="validationMessages additionalInformation"/>
+      </h:selectOneMenu><br/>
+
+      <h:outputLabel for="baseCommonAge">
          Enter your age:
       </h:outputLabel>
-      <h:inputText id="age" value="#{survey.person.age}" required="true">
+      <h:inputText id="baseCommonAge" value="#{survey.person.age}" required="true">
          <f:validateLongRange minimum="10" maximum="100" />
          <f:ajax event="keyup" reRender="@this" render="validationMessages"/>
       </h:inputText><br/>
 
-      <h:outputLabel for="height">
+      <h:outputLabel for="baseCommonHeight">
          Enter your height:
       </h:outputLabel>
-      <h:inputText id="height" value="#{survey.person.height}" required="true">
+      <h:inputText id="baseCommonHeight" value="#{survey.person.height}" required="true">
          <f:ajax event="keyup" reRender="@this" render="validationMessages"/>
       </h:inputText><br/><br/>
 
@@ -64,35 +73,35 @@
       <h:panelGroup id="femaleInfo">
          <h:panelGroup id="femaleInfoForm" rendered="#{survey.person.isFemale}">
 
-            <h:outputLabel for="bustSize">
+            <h:outputLabel for="baseFemaleBustSize">
                Enter your bust size:
             </h:outputLabel>
-            <h:inputText id="bustSize" value="#{survey.person.femaleInfo.bustSize}" required="true">
+            <h:inputText id="baseFemaleBustSize" value="#{survey.person.femaleInfo.bustSize}" required="true">
                <f:validateLongRange/>
                <f:ajax event="keyup" reRender="@this" render="validationMessages"/>
             </h:inputText><br/>
 
-            <h:outputLabel for="cupSize">
+            <h:outputLabel for="baseFemaleCupSize">
                Select your cup size:
             </h:outputLabel>
-            <h:selectOneMenu id="cupSize" value="#{survey.person.femaleInfo.cupSize}" required="true">
+            <h:selectOneMenu id="baseFemaleCupSize" value="#{survey.person.femaleInfo.cupSize}" required="true">
                <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
                <f:selectItems value="#{survey.person.femaleInfo.cupSizes}"/>
                <f:ajax event="change" render="validationMessages"/>
             </h:selectOneMenu><br/>
 
-            <h:outputLabel for="femaleWaist">
+            <h:outputLabel for="baseFemaleWaist">
                Enter your waist size:
             </h:outputLabel>
-            <h:inputText id="femaleWaist" value="#{survey.person.femaleInfo.waist}" required="true">
+            <h:inputText id="baseFemaleWaist" value="#{survey.person.femaleInfo.waist}" required="true">
                <f:validateLongRange/>
                <f:ajax event="keyup" reRender="@this" render="validationMessages"/>
             </h:inputText><br/>
 
-            <h:outputLabel for="hips">
+            <h:outputLabel for="baseFemaleHips">
                Enter your waist size:
             </h:outputLabel>
-            <h:inputText id="hips" value="#{survey.person.femaleInfo.hips}" required="true">
+            <h:inputText id="baseFemaleHips" value="#{survey.person.femaleInfo.hips}" required="true">
                <f:validateLongRange/>
                <f:ajax event="keyup" reRender="@this" render="validationMessages"/>
             </h:inputText><br/>
@@ -103,19 +112,19 @@
 
       <h:panelGroup id="maleInfo">
          <h:panelGroup id="maleInfoFrom" rendered="#{survey.person.isMale}">
-            <h:outputLabel for="maleChest">
+            <h:outputLabel for="baseMaleChest">
                Enter your chest size:
             </h:outputLabel>
-            <h:inputText id="maleChest" value="#{survey.person.maleInfo.chest}" required="true">
+            <h:inputText id="baseMaleChest" value="#{survey.person.maleInfo.chest}" required="true">
                <f:validateLongRange/>
                <f:ajax event="keyup" reRender="@this" render="validationMessages"/>
             </h:inputText><br/>
 
 
-            <h:outputLabel for="maleWaist">
+            <h:outputLabel for="baseMaleWaist">
                Enter your waist size:
             </h:outputLabel>
-            <h:inputText id="maleWaist" value="#{survey.person.maleInfo.waist}" required="true">
+            <h:inputText id="baseMaleWaist" value="#{survey.person.maleInfo.waist}" required="true">
                <f:validateLongRange/>
                <f:ajax event="keyup" reRender="@this" render="validationMessages"/>
             </h:inputText><br/>
@@ -124,7 +133,7 @@
 
 <!--      Additional info     -->
 
-      <h:panelGroup id="additionalInformation">
+      <h:panelGroup id="additionalInformation" rendered="#{survey.basicPartValid}">
          <h2>Additional information</h2>
 
          <h:outputLabel for="budget">

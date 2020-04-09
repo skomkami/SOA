@@ -6,14 +6,52 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:head>
-    <title>Survey</title>
+    <title>Summary</title>
     <link rel="stylesheet" type="text/css" href="style.css"/>
 </h:head>
 
 <h:body>
 
-    <p>Name: <h:outputText value="#{survey.person.name}"/></p><br/>
-    <p>Email: <h:outputText value="#{survey.person.email}"/></p><br/>
+    <h3>Summary</h3>
+    <p>Here we prepared summary of you survey</p>
+
+    <p>Name: <h:outputText value="#{survey.person.name}"/></p>
+    <p>Email: <h:outputText value="#{survey.person.email}"/></p>
+    <p>Gender: <h:outputText value="#{survey.person.gender}"/></p>
+    <p>Education: <h:outputText value="#{survey.person.education}"/></p>
+    <p>Age: <h:outputText value="#{survey.person.age}"/></p>
+    <p>Height: <h:outputText value="#{survey.person.height}"/></p>
+    <br/>
+
+    <h:panelGroup rendered="#{survey.person.isFemale}">
+        <p>Cup size: <h:outputText value="#{survey.person.femaleInfo.cupSize}"/></p>
+        <p>Hips: <h:outputText value="#{survey.person.femaleInfo.hips}"/></p>
+        <p>Bust size: <h:outputText value="#{survey.person.femaleInfo.bustSize}"/></p>
+        <p>Waist: <h:outputText value="#{survey.person.femaleInfo.waist}"/></p>
+    </h:panelGroup>
+
+    <h:panelGroup rendered="#{survey.person.isMale}">
+        <p>Chest: <h:outputText value="#{survey.person.maleInfo.chest}"/></p>
+        <p>Waist: <h:outputText value="#{survey.person.maleInfo.waist}"/></p>
+    </h:panelGroup>
+
+    <p>Budget: <h:outputText value="#{survey.budget}"/></p>
+    <p>Frequency: <h:outputText value="#{survey.frequency}"/></p>
+    <p>Colors you prefer:</p>
+    <h:dataTable value="#{survey.colors}" var="color">
+        <h:column>
+            <f:facet name = "header">Name</f:facet>
+            #{color}
+        </h:column>
+    </h:dataTable>
+
+    <p>Types of clothes you prefer:</p>
+    <h:dataTable value="#{survey.clothes}" var="cloth">
+        <h:column>
+            <f:facet name = "header">Name</f:facet>
+            #{cloth}
+        </h:column>
+    </h:dataTable>
 
 </h:body>
 </html>
