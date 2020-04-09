@@ -20,15 +20,20 @@
         <h:selectOneMenu id="seat" value="#{UserSession.seatNumber}" required="true">
             <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
             <f:selectItems value="#{UserSession.seats}"/>
-            <f:ajax event="change" render="validationMessages"/>
+            <f:ajax event="change" render="validationMessages total"/>
         </h:selectOneMenu><br/>
 
         <h:commandButton type="submit" value="Buy ticket" action="#{UserSession.buy}">
-<!--            <f:ajax event="click" render="balance"></f:ajax>-->
         </h:commandButton><br/>
 
         <h:messages id="validationMessages" styleClass="error"/>
     </h:form>
+    <br/>
+
+    <h:panelGroup id="total" rendered="#{UserSession.isSeatSet}" >
+        <p>Total: </p>
+        <h:outputText value="#{UserSession.seatPrice}"/>
+    </h:panelGroup>
 
     <br/>
 

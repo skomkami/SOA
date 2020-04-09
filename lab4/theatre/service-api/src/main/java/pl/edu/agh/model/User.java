@@ -16,7 +16,6 @@ public class User implements Serializable {
         this.balance = balance;
     }
 
-
     public String getLogin() {
         return login;
     }

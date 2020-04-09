@@ -43,5 +43,18 @@
         </h:column>
 
     </h:dataTable>
+    <br/>
+    <h:outputLabel for="amountOfOrdered">
+        Number of ordered books:
+    </h:outputLabel>
+    <h:outputText id="amountOfOrdered" value="#{books.selectedCount}">
+    </h:outputText>
+
+    <br/>
+    <h:outputLabel for="compoundPrice">
+        Compound price:
+    </h:outputLabel>
+    <h:outputText id="compoundPrice" value="#{books.compoundPrice} PLN">
+    </h:outputText>
 </h:body>
 </html>

@@ -2,6 +2,7 @@ package pl.edu.agh;
 
 
 import pl.edu.agh.exceptions.SeatAlreadyOccupiedException;
+import pl.edu.agh.exceptions.SeatNotFoundException;
 import pl.edu.agh.model.User;
 
 import javax.ejb.EJB;
@@ -121,4 +122,13 @@ public class UserSession implements Serializable {
         seatsManager.setUserForTransaction(null);
         return "index.xhtml";
     }
+
+    public int getSeatPrice() throws SeatNotFoundException {
+        return seatsManager.getSeatPrice(seatNumber);
+    }
+
+    public boolean getIsSeatSet() {
+        return seatNumber != null;
+    }
+
 }

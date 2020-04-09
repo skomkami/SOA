@@ -1,5 +1,6 @@
 package agh.edu.pl;
 
+import agh.edu.pl.converter.Converter;
 import agh.edu.pl.filters.*;
 import agh.edu.pl.model.Book;
 
@@ -21,8 +22,28 @@ public class Books implements Serializable {
 
     private Map<Integer, Boolean> checked = new HashMap<Integer, Boolean>();
 
+    private boolean originalCurrency = true;
+
     public Books() {
-        books = Book.books;
+        books = Book.getBooks();
+    }
+
+    public void setOriginalCurrency(boolean originalCurrency) {
+        if ( !originalCurrency ) {
+            for (Book b: books ) {
+                b.setPrice( Converter.convertToPLN(b.getPrice(), b.getCurrency()));
+                b.setCurrency( Book.Currency.PLN);
+            }
+        }
+        else {
+            this.books = Book.getBooks();
+            applyFilters();
+        }
+        this.originalCurrency = originalCurrency;
+    }
+
+    public boolean isOriginalCurrency() {
+        return originalCurrency;
     }
 
     public String submit() {
@@ -37,7 +58,7 @@ public class Books implements Serializable {
         return this.books;
     }
 
-    public List<Book> getSelectedBooks() {
+    public ArrayList<Book> getSelectedBooks() {
         ArrayList<Book> selectedBooks = new ArrayList<>();
         for(Book book : books)
             if(checked.containsKey(book.getId()) && checked.get(book.getId()))
@@ -46,8 +67,18 @@ public class Books implements Serializable {
         return selectedBooks;
     }
 
-    public Book.Currency[] getCurrencies() {
-        return Book.Currency.values();
+    public int getSelectedCount() {
+        return getSelectedBooks().size();
+    }
+
+    public Double getCompoundPrice() {
+
+        ArrayList<Book> selected = getSelectedBooks();
+        for (Book b: selected ) {
+            b.setPrice( Converter.convertToPLN(b.getPrice(), b.getCurrency()));
+            b.setCurrency( Book.Currency.PLN);
+        }
+        return selected.stream().map(b -> b.getPrice()).reduce(0.0, (p1, p2) -> p1 + p2);
     }
 
     public Book.Genre[] getGenres() {

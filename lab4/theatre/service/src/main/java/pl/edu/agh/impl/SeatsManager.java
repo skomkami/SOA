@@ -16,7 +16,6 @@ import javax.ejb.Singleton;
 import java.util.ArrayList;
 
 @Singleton
-@Lock
 public class SeatsManager implements ISeatsManagerRemote {
 
     @EJB
@@ -37,11 +36,13 @@ public class SeatsManager implements ISeatsManagerRemote {
         return usersService.userWithCredentials(login, password);
     }
 
+    @Lock
     @Override
     public ArrayList<Seat> getSeatList() {
         return seatsService.getSeats();
     }
 
+    @Lock
     @Override
     public int getSeatPrice(int seatNumber) throws SeatNotFoundException {
         return seatsService.getSeatById(seatNumber).getPrice();
@@ -57,6 +58,7 @@ public class SeatsManager implements ISeatsManagerRemote {
         return ticketService.getUser().getBalance();
     }
 
+    @Lock
     @Override
     public void buyTicket(int seatNumber) throws SeatNotFoundException, SeatAlreadyOccupiedException, NotEnoughFundsException {
         Seat seat = seatsService.getSeatById(seatNumber);

@@ -61,6 +61,14 @@
 
 <h:form>
 
+   <h:outputLabel for="dispCurrency">
+      Original currency:
+   </h:outputLabel>
+   <h:selectBooleanCheckbox id="dispCurrency" value="#{books.originalCurrency}">
+      <f:ajax event="change" render="booksForm"/>
+   </h:selectBooleanCheckbox>
+   <br/>
+
    <h:outputLabel for="addPriceFilter">
       Add price filter:
    </h:outputLabel>
@@ -71,6 +79,7 @@
    <h:inputText id="priceFilterValue" value="#{books.filterPrice}">
    </h:inputText>
    <h:commandButton type="submit" value="Add filter" action="#{books.addPriceFilter}">
+      <f:ajax execute="@form" render="booksForm filtersTable"/>
    </h:commandButton><br/>
 
 
@@ -86,6 +95,7 @@
       <f:selectItems value="#{books.genres}"/>
    </h:selectOneMenu>
    <h:commandButton type="submit" value="Add filter" action="#{books.addGenreFilter}">
+      <f:ajax execute="@form" render="booksForm filtersTable"/>
    </h:commandButton><br/>
 
    <h:dataTable id="filtersTable" value="#{books.filters}" var="filter">
