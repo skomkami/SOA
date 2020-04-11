@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:a="http://java.sun.com/jsf/composite"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+<h:head>
+    <title>Books</title>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+</h:head>
+
+<h:body>
+    <h:form id="booksForm">
+        <h:dataTable value="#{books.booksList}" var="book">
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Select" />
+                </f:facet>
+                <h:selectBooleanCheckbox value="#{books.checked[book.id]}" />
+            </h:column>
+
+            <h:column>
+                <f:facet name = "header">Id</f:facet>
+                #{book.id}
+            </h:column>
+
+            <h:column>
+                <f:facet name = "header">Author</f:facet>
+                #{book.authorName} #{book.authorSurname}
+            </h:column>
+
+            <h:column>
+                <f:facet name = "header">Title</f:facet>
+                #{book.title}
+            </h:column>
+
+            <h:column>
+                <f:facet name = "header">Isbn</f:facet>
+                #{book.isbn}
+            </h:column>
+
+            <h:column>
+                <f:facet name = "header">Year</f:facet>
+                #{book.year}
+            </h:column>
+
+            <h:column>
+                <f:facet name = "header">Price</f:facet>
+                #{book.price}
+            </h:column>
+        </h:dataTable>
+
+        <h:commandButton type="submit" id="submit" value="Delete selected" action="#{books.delete}">
+            <f:ajax execute="@form" render="booksForm editForm"/>
+        </h:commandButton>
+        <h:messages id="validationMessages" styleClass="error"/>
+
+    </h:form>
+
+    <hr/>
+
+    <h3>Add book</h3>
+    <h:form id="addBook">
+        <h:inputText id="addAuthorSurname" value="#{books.addBook.authorSurname}" pt:placeholder="Author surname">
+        </h:inputText><br/>
+
+        <h:inputText id="addAuthorName" value="#{books.addBook.authorName}" pt:placeholder="Author name">
+        </h:inputText><br/>
+
+        <h:inputText id="addTitle" value="#{books.addBook.title}" pt:placeholder="Title">
+        </h:inputText><br/>
+
+        <h:inputText id="addIsbn" value="#{books.addBook.isbn}" pt:placeholder="Isbn">
+        </h:inputText><br/>
+
+
+        <h:inputText id="addYear" value="#{books.addBook.year}" pt:placeholder="Year">
+            <f:validateLongRange minimum = "0" maximum = "2020" />
+        </h:inputText><br/>
+
+        <h:inputText id="addPrice" value="#{books.addBook.price}" pt:placeholder="Price">
+            <f:validateDoubleRange minimum = "0.01" maximum = "999.99" />
+        </h:inputText><br/>
+
+        <h:commandButton type="submit" value="Add book" action="#{books.insertBook}">
+            <f:ajax execute="@form" render="booksForm editForm @form"/>
+        </h:commandButton><br/>
+    </h:form>
+
+    <hr/>
+
+    <h3>Edit book</h3>
+    <h:form id="editForm">
+
+        <h:outputLabel for="editId">
+            Select entity to edit
+        </h:outputLabel>
+        <h:selectOneMenu id="editId" value="#{books.editBookId}">
+            <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+            <f:selectItems value="#{books.booksIds}"/>
+            <f:ajax event="change" render="editForm" />
+        </h:selectOneMenu><br/>
+
+        <h:panelGroup rendered="#{books.inEditMode}">
+
+            <h:inputText id="editAuthorSurname" value="#{books.editBook.authorSurname}" pt:placeholder="Author surname">
+            </h:inputText><br/>
+
+            <h:inputText id="editAuthorName" value="#{books.editBook.authorName}" pt:placeholder="Author name">
+            </h:inputText><br/>
+
+            <h:inputText id="editTitle" value="#{books.editBook.title}" pt:placeholder="Title">
+            </h:inputText><br/>
+
+            <h:inputText id="editIsbn" value="#{books.editBook.isbn}" pt:placeholder="Isbn">
+            </h:inputText><br/>
+
+            <h:inputText id="editYear" value="#{books.editBook.year}" pt:placeholder="Year">
+                <f:validateLongRange minimum = "0" maximum = "2020" />
+            </h:inputText><br/>
+
+            <h:inputText id="editPrice" value="#{books.editBook.price}" pt:placeholder="Price">
+                <f:validateDoubleRange minimum = "0.01" maximum = "999.99" />
+            </h:inputText><br/>
+
+            <h:commandButton type="submit" value="Edit book" action="#{books.edit}">
+                <f:ajax execute="@form" render="booksForm @form"/>
+            </h:commandButton><br/>
+        </h:panelGroup>
+
+
+    </h:form>
+
+</h:body>
+</html>
