@@ -34,32 +34,42 @@ public class Survey implements Serializable {
         return Person.Gender.values();
     }
 
-    public boolean isBasicPartValid() {
-        UIViewRoot view = FacesContext.getCurrentInstance().getViewRoot();
-        Set<Map.Entry<String, Object>> componentStream = view.getViewMap().entrySet();
-        boolean baseCommon = componentStream
-                .stream()
-                .filter( e -> e.getKey().startsWith("baseCommon"))
-                .map(e -> ((UIInput)e.getValue()).isValid())
-                .reduce(true, (a,b) -> a && b );
+//    public boolean isBasicPartValid() {
+//        UIViewRoot view = FacesContext.getCurrentInstance().getViewRoot();
+//        Set<Map.Entry<String, Object>> componentStream = view.getViewMap().entrySet();
+//        boolean baseCommon = componentStream
+//                .stream()
+//                .filter( e -> e.getKey().startsWith("baseCommon"))
+//                .map(e -> ((UIInput)e.getValue()).isValid())
+//                .reduce(true, (a,b) -> a && b );
+//
+//        if ( baseCommon ) {
+//            if ( this.person.getIsFemale() ) {
+//                return componentStream
+//                        .stream()
+//                        .filter( e -> e.getKey().startsWith("baseFemale"))
+//                        .map(e -> ((UIInput)e.getValue()).isValid())
+//                        .reduce(true, (a,b) -> a && b );
+//            } else {
+//                return componentStream
+//                        .stream()
+//                        .filter( e -> e.getKey().startsWith("baseMale"))
+//                        .map(e -> ((UIInput)e.getValue()).isValid())
+//                        .reduce(true, (a,b) -> a && b );
+//            }
+//        } else {
+//            return false;
+//        }
+//    }
 
-        if ( baseCommon ) {
-            if ( this.person.getIsFemale() ) {
-                return componentStream
-                        .stream()
-                        .filter( e -> e.getKey().startsWith("baseFemale"))
-                        .map(e -> ((UIInput)e.getValue()).isValid())
-                        .reduce(true, (a,b) -> a && b );
-            } else {
-                return componentStream
-                        .stream()
-                        .filter( e -> e.getKey().startsWith("baseMale"))
-                        .map(e -> ((UIInput)e.getValue()).isValid())
-                        .reduce(true, (a,b) -> a && b );
-            }
-        } else {
-            return false;
-        }
+    public void sendBasePart() {
+        basePartFilled = true;
+    }
+
+    private boolean basePartFilled = false;
+
+    public boolean isBasicPartFilled() {
+        return basePartFilled;
     }
 
     public Education[] getEducations() {

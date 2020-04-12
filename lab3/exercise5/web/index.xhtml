@@ -131,9 +131,13 @@
          </h:panelGroup>
       </h:panelGroup>
 
+      <h:commandButton type="submit" value="Next part" action="${survey.sendBasePart()}">
+         <f:ajax execute="@form" render="mainSurvey"/>
+      </h:commandButton><br/>
+
 <!--      Additional info     -->
 
-      <h:panelGroup id="additionalInformation" rendered="#{survey.basicPartValid}">
+      <h:panelGroup id="additionalInformation" rendered="#{survey.basicPartFilled}">
          <h2>Additional information</h2>
 
          <h:outputLabel for="budget">
@@ -181,10 +185,10 @@
             <f:ajax event="change" render="validationMessages"/>
          </h:selectManyListbox><br/>
 
+         <h:commandButton type="submit" value="Submit survey" action="${survey.addSurvey()}">
+         </h:commandButton><br/>
       </h:panelGroup>
 
-      <h:commandButton type="submit" value="Submit survey" action="${survey.addSurvey()}">
-      </h:commandButton><br/>
 
       <h:messages id="validationMessages" styleClass="error"/>
    </h:form>
