@@ -2,7 +2,6 @@ package app.beans;
 
 import app.dao.CategoriesDAO;
 import app.model.Category;
-import app.model.Category;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -21,7 +20,7 @@ public class Categories implements Serializable {
     @Inject
     private CategoriesDAO categoriesDAO;
 
-    public List<Category> getCategoriesList() { return categoriesDAO.getCategories(); }
+    public List<Category> getCategoriesList() { return categoriesDAO.getAll(); }
 
     public List<Integer> getCategoriesIds() {
         return getCategoriesList().stream().map(c -> c.getId()).collect(Collectors.toCollection(ArrayList::new));
@@ -30,7 +29,7 @@ public class Categories implements Serializable {
     public void deleteCategory() {
         try {
             for ( Category b: getSelectedCategories() )
-                categoriesDAO.removeCategory(b);
+                categoriesDAO.remove(b);
         } catch (Exception e) {
 
         }
@@ -67,7 +66,7 @@ public class Categories implements Serializable {
 
     public void setEditCategoryId(Integer editCategoryId) {
         if ( editCategoryId != null ) {
-            editCategory = categoriesDAO.findCategory(editCategoryId);
+            editCategory = categoriesDAO.find(editCategoryId);
         } else {
             editCategory = null;
         }
@@ -87,7 +86,7 @@ public class Categories implements Serializable {
         } else {
 
 
-            categoriesDAO.addCategory(this.addCategory);
+            categoriesDAO.add(this.addCategory);
             this.addCategory = new Category();
         }
     }
@@ -101,7 +100,7 @@ public class Categories implements Serializable {
     }
 
     public void editCategoryInDAO() {
-        categoriesDAO.editCategory(this.editCategory);
+        categoriesDAO.edit(this.editCategory);
         this.editCategory = null;
         this.editCategoryId = null;
     }

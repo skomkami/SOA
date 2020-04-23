@@ -23,14 +23,14 @@ public class Authors implements Serializable {
     public void deleteAuthor() {
         try {
             for ( Author b: getSelectedAuthors() )
-                authorsDAO.removeAuthor(b);
+                authorsDAO.remove(b);
         } catch (Exception e) {
 
         }
     }
 
     public Author getAuthor(int id) {
-        return authorsDAO.findAuthor(id);
+        return authorsDAO.find(id);
     }
 
     private Map<Integer, Boolean> checkedAuthors = new HashMap<Integer, Boolean>();
@@ -40,7 +40,7 @@ public class Authors implements Serializable {
     }
 
     public List<Author> getAuthorsList() {
-        return authorsDAO.getAuthors();
+        return authorsDAO.getAll();
     }
 
     public List<Integer> getAuthorsIds() {
@@ -72,7 +72,7 @@ public class Authors implements Serializable {
 
     public void setEditAuthorId(Integer editAuthorId) {
         if ( editAuthorId != null ) {
-            editAuthor = authorsDAO.findAuthor(editAuthorId);
+            editAuthor = authorsDAO.find(editAuthorId);
         } else {
             editAuthor = null;
         }
@@ -92,7 +92,7 @@ public class Authors implements Serializable {
         } else {
 
 
-            authorsDAO.addAuthor(this.addAuthor);
+            authorsDAO.add(this.addAuthor);
             this.addAuthor = new Author();
         }
     }
@@ -106,7 +106,7 @@ public class Authors implements Serializable {
     }
 
     public void editAuthorInDAO() {
-        authorsDAO.editAuthor(this.editAuthor);
+        authorsDAO.edit(this.editAuthor);
         this.editAuthor = null;
         this.editAuthorId = null;
     }

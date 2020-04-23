@@ -9,7 +9,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.TypedQuery;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -24,27 +23,15 @@ public class Search extends EntityDAO {
     @Inject
     private BooksDAO booksDAO;
 
-//    @Inject
-//    private ReadersDAO readersDAO;
-//
     @Inject
     private AuthorsDAO authorsDAO;
-//
-//    @Inject
-//    private CategoriesDAO categoriesDAO;
-//
-//    @Inject
-//    private LoansDAO loansDAO;
-//
-//    @Inject
-//    private CatalogDAO catalogDAO;
 
     public List<Book> getFoundBooks() {
-        return booksDAO.getBooks();
+        return booksDAO.getAll();
     }
 
     public List<Author> getAuthorsList() {
-        return authorsDAO.getAuthors();
+        return authorsDAO.getAll();
     }
 
     private Author authorForReaders;

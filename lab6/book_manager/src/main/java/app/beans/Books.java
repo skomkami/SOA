@@ -35,15 +35,15 @@ public class Books implements Serializable {
     private CategoriesDAO categoriesDAO;
 
     public List<Integer> getAuthorsIds() {
-        return authorsDAO.getAuthors().stream().map(a -> a.getId()).collect(Collectors.toCollection(ArrayList::new));
+        return authorsDAO.getAll().stream().map(a -> a.getId()).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public List<Integer> getCategoriesIds() {
-        return categoriesDAO.getCategories().stream().map(c -> c.getId()).collect(Collectors.toCollection(ArrayList::new));
+        return categoriesDAO.getAll().stream().map(c -> c.getId()).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public List<Book> getBooksList() {
-        return booksDAO.getBooks();
+        return booksDAO.getAll();
     }
 
     public List<Integer> getBooksIds() {
@@ -53,7 +53,7 @@ public class Books implements Serializable {
     public void deleteBook() {
         try {
             for ( Book b: getSelectedBooks() )
-                booksDAO.removeBook(b);
+                booksDAO.remove(b);
         } catch (Exception e) {
 
         }
@@ -127,7 +127,7 @@ public class Books implements Serializable {
 
     public void setEditBookId(Integer editBookId) {
         if ( editBookId != null ) {
-            editBook = booksDAO.findBook(editBookId);
+            editBook = booksDAO.find(editBookId);
             editBookAuthorId = editBook.getAuthor().getId();
             editBookCategoryId = editBook.getCategory().getId();
         } else {
@@ -152,11 +152,11 @@ public class Books implements Serializable {
                 FacesContext context = FacesContext.getCurrentInstance();
                 context.addMessage("addBook", new FacesMessage("Set authorId and categoryId"));
             } else {
-                Author author = authorsDAO.findAuthor(addBookAuthorId);
-                Category category = categoriesDAO.findCategory(addBookCategoryId);
+                Author author = authorsDAO.find(addBookAuthorId);
+                Category category = categoriesDAO.find(addBookCategoryId);
                 this.addBook.setAuthor(author);
                 this.addBook.setCategory(category);
-                booksDAO.addBook(this.addBook);
+                booksDAO.add(this.addBook);
                 this.addBook = new Book();
             }
         }
@@ -173,15 +173,15 @@ public class Books implements Serializable {
     public void editBookInDAO() {
 
         if (this.editBookAuthorId != editBook.getAuthor().getId()) {
-            Author author = authorsDAO.findAuthor(editBookAuthorId);
+            Author author = authorsDAO.find(editBookAuthorId);
             editBook.setAuthor(author);
         }
         if (this.editBookCategoryId != editBook.getCategory().getId()) {
-            Category category = categoriesDAO.findCategory(editBookCategoryId);
+            Category category = categoriesDAO.find(editBookCategoryId);
             editBook.setCategory(category);
         }
 
-        booksDAO.editBook(this.editBook);
+        booksDAO.edit(this.editBook);
         this.editBook = null;
         this.editBookId = null;
     }

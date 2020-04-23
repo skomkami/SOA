@@ -15,7 +15,7 @@
 
 <h:body>
     <a href="index.xhtml">Books</a><br/>
-    <a href="search.xhtml">Books Search</a><br/>
+    <a href="search.xhtml">Search</a><br/>
 
     <!--    Readers  section-->
     <hr/><hr/>
@@ -64,7 +64,7 @@
         </h:inputText><br/>
 
         <h:commandButton type="submit" value="Add reader" action="#{readers.insertReader}">
-            <f:ajax execute="@form" render="readersForm addBook editReaderForm @form"/>
+            <f:ajax execute="@form" render="readersForm addLoan addBook editReaderForm @form"/>
         </h:commandButton><br/>
     </h:form>
 

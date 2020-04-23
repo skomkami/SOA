@@ -23,7 +23,7 @@ public class Readers implements Serializable {
     public void deleteReader() {
         try {
             for ( Reader b: getSelectedReaders() )
-                readersDAO.removeReader(b);
+                readersDAO.remove(b);
         } catch (Exception e) {
 
         }
@@ -36,7 +36,7 @@ public class Readers implements Serializable {
     }
 
     public List<Reader> getReadersList() {
-        return readersDAO.getReaders();
+        return readersDAO.getAll();
     }
 
     public List<Integer> getReadersIds() {
@@ -68,7 +68,7 @@ public class Readers implements Serializable {
 
     public void setEditReaderId(Integer editReaderId) {
         if ( editReaderId != null ) {
-            editReader = readersDAO.findReader(editReaderId);
+            editReader = readersDAO.find(editReaderId);
         } else {
             editReader = null;
         }
@@ -88,7 +88,7 @@ public class Readers implements Serializable {
         } else {
 
 
-            readersDAO.addReader(this.addReader);
+            readersDAO.add(this.addReader);
             this.addReader = new Reader();
         }
     }
@@ -102,7 +102,7 @@ public class Readers implements Serializable {
     }
 
     public void editReaderInDAO() {
-        readersDAO.editReader(this.editReader);
+        readersDAO.edit(this.editReader);
         this.editReader = null;
         this.editReaderId = null;
     }

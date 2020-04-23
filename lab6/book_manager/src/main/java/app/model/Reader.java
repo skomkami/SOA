@@ -1,30 +1,18 @@
 package app.model;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "readers")
-public class Reader implements Serializable {
-
-    @Id
-    @GeneratedValue
-    @Column(name = "id", nullable = false)
-    private int id;
+public class Reader extends IdentifiableEntity {
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
     @Column(name = "last_name", nullable = false)
     private String lastName;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getFirstName() {
         return firstName;
@@ -44,11 +32,5 @@ public class Reader implements Serializable {
 
     public Reader() {
         super();
-    }
-
-    public Reader(int id, String firstName, String lastName) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
     }
 }

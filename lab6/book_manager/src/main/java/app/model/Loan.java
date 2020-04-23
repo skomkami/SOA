@@ -1,17 +1,11 @@
 package app.model;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
 
 @Table( name = "loans")
 @Entity
-public class Loan implements Serializable {
-
-    @Id
-    @GeneratedValue
-    @Column(name = "id", nullable = false)
-    private int id;
+public class Loan extends IdentifiableEntity{
 
     @ManyToOne
     @JoinColumn(name = "book_id")
@@ -26,14 +20,6 @@ public class Loan implements Serializable {
 
     @Temporal(TemporalType.DATE)
     private java.util.Date endDate;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public Date getBeginDate() {
         return beginDate;

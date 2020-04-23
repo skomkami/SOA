@@ -1,9 +1,6 @@
 package app.beans;
 
-import app.dao.BooksDAO;
-import app.dao.CatalogDAO;
-import app.dao.LoansDAO;
-import app.dao.ReadersDAO;
+import app.dao.*;
 import app.model.*;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -35,11 +32,11 @@ public class Loans implements Serializable {
     private CatalogDAO catalogDAO;
 
     public List<Integer> getBooksIds() {
-        return booksDAO.getBooks().stream().map(b -> b.getId()).collect(Collectors.toCollection(ArrayList::new));
+        return booksDAO.getAll().stream().map(b -> b.getId()).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public List<Integer> getReadersIds() {
-        return readersDAO.getReaders().stream().map(r -> r.getId()).collect(Collectors.toCollection(ArrayList::new));
+        return readersDAO.getAll().stream().map(r -> r.getId()).collect(Collectors.toCollection(ArrayList::new));
     }
 
     private Integer addLoanBookId;
@@ -86,8 +83,8 @@ public class Loans implements Serializable {
                 int bookId = l.getBook().getId();
                 Catalog catalog = catalogDAO.getCatalogWithBookId(bookId);
                 catalog.setInStock(catalog.getInStock() + 1);
-                catalogDAO.editCatalog(catalog);
-                loansDAO.removeLoan(l);
+                catalogDAO.edit(catalog);
+                loansDAO.remove(l);
             }
         } catch (Exception e) {
 
@@ -101,7 +98,7 @@ public class Loans implements Serializable {
     }
 
     public List<Loan> getLoansList() {
-        return loansDAO.getLoans();
+        return loansDAO.getAll();
     }
 
     public List<Integer> getLoansIds() {
@@ -133,7 +130,7 @@ public class Loans implements Serializable {
 
     public void setEditLoanId(Integer editLoanId) {
         if ( editLoanId != null ) {
-            editLoan = loansDAO.findLoan(editLoanId);
+            editLoan = loansDAO.find(editLoanId);
             editLoanBookId = editLoan.getBook().getId();
             editLoanReaderId = editLoan.getReader().getId();
         } else {
@@ -159,7 +156,7 @@ public class Loans implements Serializable {
                 return;
             }
 
-            Book book = booksDAO.findBook(addLoanBookId);
+            Book book = booksDAO.find(addLoanBookId);
             Catalog catalog = catalogDAO.getCatalogWithBookId(book.getId());
 
             if (catalog.getInStock() <= 0) {
@@ -169,11 +166,11 @@ public class Loans implements Serializable {
             }
 
             catalog.setInStock(catalog.getInStock() - 1 );
-            catalogDAO.editCatalog(catalog);
-            Reader reader = readersDAO.findReader(addLoanReaderId);
+            catalogDAO.edit(catalog);
+            Reader reader = readersDAO.find(addLoanReaderId);
             addLoan.setBook(book);
             addLoan.setReader(reader);
-            loansDAO.addLoan(this.addLoan);
+            loansDAO.add(this.addLoan);
             this.addLoan = new Loan();
 
         }
@@ -190,15 +187,15 @@ public class Loans implements Serializable {
     public void editLoanInDAO() {
 
         if (this.editLoanBookId != editLoan.getBook().getId()) {
-            Book book = booksDAO.findBook(editLoanBookId);
+            Book book = booksDAO.find(editLoanBookId);
             editLoan.setBook(book);
         }
         if (this.editLoanReaderId != editLoan.getReader().getId()) {
-            Reader reader = readersDAO.findReader(editLoanReaderId);
+            Reader reader = readersDAO.find(editLoanReaderId);
             editLoan.setReader(reader);
         }
 
-        loansDAO.editLoan(this.editLoan);
+        loansDAO.edit(this.editLoan);
         this.editLoan = null;
         this.editLoanId = null;
     }

@@ -30,7 +30,7 @@ public class CatalogBean implements Serializable {
     private BooksDAO booksDAO;
 
     public List<Integer> getBooksIds() {
-        return booksDAO.getBooks().stream().map(b -> b.getId()).collect(Collectors.toCollection(ArrayList::new));
+        return booksDAO.getAll().stream().map(b -> b.getId()).collect(Collectors.toCollection(ArrayList::new));
     }
 
     private Integer addCatalogBookId;
@@ -55,7 +55,7 @@ public class CatalogBean implements Serializable {
     public void deleteCatalog() {
         try {
             for ( Catalog c: getSelectedCatalogs() )
-                catalogDAO.removeCatalog(c);
+                catalogDAO.remove(c);
         } catch (Exception e) {
 
         }
@@ -68,7 +68,7 @@ public class CatalogBean implements Serializable {
     }
 
     public List<Catalog> getCatalogsList() {
-        return catalogDAO.getCatalogs();
+        return catalogDAO.getAll();
     }
 
     public List<Integer> getCatalogsIds() {
@@ -100,7 +100,7 @@ public class CatalogBean implements Serializable {
 
     public void setEditCatalogId(Integer editCatalogId) {
         if ( editCatalogId != null ) {
-            editCatalog = catalogDAO.findCatalog(editCatalogId);
+            editCatalog = catalogDAO.find(editCatalogId);
             editCatalogBookId = editCatalog.getBook().getId();
         } else {
             editCatalog = null;
@@ -123,9 +123,9 @@ public class CatalogBean implements Serializable {
                 FacesContext context = FacesContext.getCurrentInstance();
                 context.addMessage("addCatalog", new FacesMessage("Set bookId"));
             } else {
-                Book book = booksDAO.findBook(addCatalogBookId);
+                Book book = booksDAO.find(addCatalogBookId);
                 addCatalog.setBook(book);
-                catalogDAO.addCatalog(this.addCatalog);
+                catalogDAO.add(this.addCatalog);
                 this.addCatalog = new Catalog();
             }
         }
@@ -140,7 +140,7 @@ public class CatalogBean implements Serializable {
     }
 
     public void editCatalogInDAO() {
-        catalogDAO.editCatalog(this.editCatalog);
+        catalogDAO.edit(this.editCatalog);
         this.editCatalog = null;
         this.editCatalogId = null;
     }

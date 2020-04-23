@@ -1,16 +1,10 @@
 package app.model;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "books")
-public class Book implements Serializable {
-
-    @Id
-    @GeneratedValue
-    @Column(name = "id", nullable = false)
-    private int id;
+public class Book extends IdentifiableEntity {
 
     @Column(name = "title", nullable = false)
     private String title;
@@ -40,28 +34,6 @@ public class Book implements Serializable {
 
     public void setAuthor(Author author) {
         this.author = author;
-    }
-
-    public Book() {
-        super();
-    }
-
-    public Book(String title, String isbn) {
-        this.title = title;
-        this.isbn = isbn;
-    }
-
-    public Book(Book other) {
-        this.title = other.title;
-        this.isbn = other.isbn;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public void setTitle(String title) {
