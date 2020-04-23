@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+<h:head>
+    <title>Library</title>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+</h:head>
+
+<h:body>
+    <a href="index.xhtml">books</a>
+
+    <!--    Readers  section-->
+    <hr/><hr/>
+    <h1>Readers</h1>
+    <h:form id="readersForm">
+        <h:dataTable value="#{readers.readersList}" var="reader">
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Select" />
+                </f:facet>
+                <h:selectBooleanCheckbox value="#{readers.checkedReaders[reader.id]}" />
+            </h:column>
+
+            <h:column>
+                <f:facet name = "header">Id</f:facet>
+                #{reader.id}
+            </h:column>
+
+            <h:column>
+                <f:facet name = "header">First Name</f:facet>
+                #{reader.firstName}
+            </h:column>
+
+            <h:column>
+                <f:facet name = "header">Last Name</f:facet>
+                #{reader.lastName}
+            </h:column>
+        </h:dataTable>
+
+        <h:commandButton type="submit" id="submitReader" value="Delete selected" action="#{readers.deleteReader}">
+            <f:ajax execute="@form" render="readersForm editForm"/>
+        </h:commandButton>
+        <h:messages id="validationMessagesReader" styleClass="error"/>
+
+    </h:form>
+
+    <hr/>
+
+    <h3>Add reader</h3>
+    <h:form id="addReader">
+
+        <h:inputText id="addReaderFirstName" value="#{readers.addReader.firstName}" pt:placeholder="Reader first name">
+        </h:inputText><br/>
+
+        <h:inputText id="addReaderLastName" value="#{readers.addReader.lastName}" pt:placeholder="Reader last name">
+        </h:inputText><br/>
+
+        <h:commandButton type="submit" value="Add reader" action="#{readers.insertReader}">
+            <f:ajax execute="@form" render="readersForm addBook editReaderForm @form"/>
+        </h:commandButton><br/>
+    </h:form>
+
+    <hr/>
+
+    <h3>Edit reader</h3>
+    <h:form id="editReaderForm">
+
+        <h:outputLabel for="editReaderId">
+            Select reader to edit
+        </h:outputLabel>
+        <h:selectOneMenu id="editReaderId" value="#{readers.editReaderId}">
+            <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+            <f:selectItems value="#{readers.readersIds}"/>
+            <f:ajax event="change" render="editReaderForm" />
+        </h:selectOneMenu><br/>
+
+        <h:panelGroup rendered="#{readers.inEditMode}">
+
+            <h:inputText id="editFirstName" value="#{readers.editReader.firstName}" pt:placeholder="First name">
+            </h:inputText><br/>
+
+            <h:inputText id="editLastName" value="#{readers.editReader.lastName}" pt:placeholder="Last name">
+            </h:inputText><br/>
+
+            <h:commandButton type="submit" value="Edit reader" action="#{readers.editReaderInDAO}">
+                <f:ajax execute="@form" render="readersForm @form"/>
+            </h:commandButton><br/>
+        </h:panelGroup>
+
+    </h:form>
+
+    <!--    Catalog  section-->
+    <hr class="bold-line"/>
+    <h1>Catalog</h1>
+    <h:form id="catalogForm">
+        <h:dataTable value="#{catalog.catalogsList}" var="pos">
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Select" />
+                </f:facet>
+                <h:selectBooleanCheckbox value="#{catalog.checkedCatalogs[pos.id]}" />
+            </h:column>
+
+            <h:column>
+                <f:facet name = "header">Id</f:facet>
+                #{pos.id}
+            </h:column>
+
+            <h:column>
+                <f:facet name = "header">Book</f:facet>
+                #{pos.book.title}
+            </h:column>
+
+            <h:column>
+                <f:facet name = "header">In stock</f:facet>
+                #{pos.inStock}
+            </h:column>
+        </h:dataTable>
+
+        <h:commandButton type="submit" id="submitCatalog" value="Delete selected" action="#{catalog.deleteCatalog}">
+            <f:ajax execute="@form" render="catalogForm editCatalog"/>
+        </h:commandButton>
+        <h:messages id="validationMessagesCatalog" styleClass="error"/>
+
+    </h:form>
+
+    <hr/>
+
+    <h3>Add position to catalog</h3>
+    <h:form id="addCatalog">
+
+        <h:outputLabel for="addCatalogBookId">
+            Select book:
+        </h:outputLabel>
+        <h:selectOneMenu id="addCatalogBookId" value="#{catalog.addCatalogBookId}" required="true">
+            <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+            <f:selectItems value="#{catalog.booksIds}"/>
+            <f:ajax event="change" render="validationMessagesCatalog"/>
+        </h:selectOneMenu><br/>
+
+        <h:inputText id="addCatalogInStock" value="#{catalog.addCatalog.inStock}" pt:placeholder="Add in stock number">
+        </h:inputText><br/>
+
+        <h:commandButton type="submit" value="Add position to catalog" action="#{catalog.insertCatalog}">
+            <f:ajax execute="@form" render="catalogForm editCatalogForm @form"/>
+        </h:commandButton><br/>
+    </h:form>
+
+    <hr/>
+
+    <h3>Edit catalog</h3>
+    <h:form id="editCatalogForm">
+
+        <h:outputLabel for="editReaderId">
+            Select reader to edit
+        </h:outputLabel>
+        <h:selectOneMenu id="editCatalogId" value="#{catalog.editCatalogId}">
+            <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+            <f:selectItems value="#{catalog.catalogsIds}"/>
+            <f:ajax event="change" render="editCatalogForm" />
+        </h:selectOneMenu><br/>
+
+        <h:panelGroup rendered="#{catalog.inEditMode}">
+
+            <h:outputLabel for="editCatalogBookId">
+                Select book:
+            </h:outputLabel>
+            <h:selectOneMenu id="editCatalogBookId" value="#{catalog.editCatalogBookId}" required="true">
+                <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+                <f:selectItems value="#{catalog.booksIds}"/>
+                <f:ajax event="change" render="validationMessagesCatalog"/>
+            </h:selectOneMenu><br/>
+
+            <h:inputText id="editCatalogInStock" value="#{catalog.editCatalog.inStock}" pt:placeholder="In stock number">
+            </h:inputText><br/>
+
+            <h:commandButton type="submit" value="Edit catalog position" action="#{catalog.editCatalogInDAO}">
+                <f:ajax execute="@form" render="catalogForm @form"/>
+            </h:commandButton><br/>
+        </h:panelGroup>
+
+    </h:form>
+
+
+    <!--    Loans  section-->
+    <hr class="bold-line"/>
+    <h1>Loans</h1>
+    <h:form id="loansForm">
+        <h:dataTable value="#{loans.loansList}" var="loan">
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Select" />
+                </f:facet>
+                <h:selectBooleanCheckbox value="#{loans.checkedLoans[loan.id]}" />
+            </h:column>
+
+            <h:column>
+                <f:facet name = "header">Id</f:facet>
+                #{loan.id}
+            </h:column>
+
+            <h:column>
+                <f:facet name = "header">Reader</f:facet>
+                #{loan.reader.firstName} #{loan.reader.lastName}
+            </h:column>
+
+            <h:column>
+                <f:facet name = "header">Book title</f:facet>
+                #{loan.book.title}
+            </h:column>
+
+            <h:column>
+                <f:facet name = "header">Begin date</f:facet>
+                #{loan.beginDate}
+            </h:column>
+
+            <h:column>
+                <f:facet name = "header">End date</f:facet>
+                #{loan.endDate}
+            </h:column>
+        </h:dataTable>
+
+        <h:commandButton type="submit" id="submitLoan" value="Delete selected" action="#{loans.deleteLoan}">
+            <f:ajax execute="@form" render="loansForm catalogForm editLoanForm"/>
+        </h:commandButton>
+        <h:messages id="validationMessagesLoans" styleClass="error"/>
+
+    </h:form>
+
+    <hr/>
+
+    <h3>Add loan</h3>
+    <h:form id="addLoan">
+
+        <h:outputLabel for="addLoanBookId">
+            Select book:
+        </h:outputLabel>
+        <h:selectOneMenu id="addLoanBookId" value="#{loans.addLoanBookId}" required="true">
+            <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+            <f:selectItems value="#{loans.booksIds}"/>
+            <f:ajax event="change" render="validationMessagesLoan"/>
+        </h:selectOneMenu><br/>
+
+        <h:outputLabel for="addLoanReaderId">
+            Select reader:
+        </h:outputLabel>
+        <h:selectOneMenu id="addLoanReaderId" value="#{loans.addLoanReaderId}" required="true">
+            <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+            <f:selectItems value="#{loans.readersIds}"/>
+            <f:ajax event="change" render="validationMessages"/>
+        </h:selectOneMenu><br/>
+
+        <h:outputLabel for="addLoanBeginDate">
+            Enter begin date:
+        </h:outputLabel>
+        <h:inputText a:type="date" id="addLoanBeginDate" value="#{loans.addLoan.beginDate}">
+            <f:convertDateTime pattern="yyyy-MM-dd"/>
+        </h:inputText><br/>
+
+        <h:outputLabel for="addLoanEndDate">
+            Enter end date:
+        </h:outputLabel>
+        <h:inputText a:type="date" id="addLoanEndDate" value="#{loans.addLoan.endDate}">
+            <f:convertDateTime pattern="yyyy-MM-dd"/>
+        </h:inputText><br/>
+
+        <h:commandButton type="submit" value="Add loan" action="#{loans.insertLoan}">
+            <f:ajax execute="@form" render="editLoanForm catalogForm loansForm @form"/>
+        </h:commandButton><br/>
+    </h:form>
+
+    <hr/>
+
+    <h3>Edit loan</h3>
+    <h:form id="editLoanForm">
+
+        <h:outputLabel for="editLoanId">
+            Select reader to edit
+        </h:outputLabel>
+        <h:selectOneMenu id="editLoanId" value="#{loans.editLoanId}">
+            <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+            <f:selectItems value="#{loans.loansIds}"/>
+            <f:ajax event="change" render="editLoanForm" />
+        </h:selectOneMenu><br/>
+
+        <h:panelGroup rendered="#{loans.inEditMode}">
+
+            <h:outputLabel for="editLoanBookId">
+                Select book:
+            </h:outputLabel>
+            <h:selectOneMenu id="editLoanBookId" value="#{loans.editLoanBookId}" required="true">
+                <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+                <f:selectItems value="#{loans.booksIds}"/>
+                <f:ajax event="change" render="validationMessagesLoan"/>
+            </h:selectOneMenu><br/>
+
+            <h:outputLabel for="editLoanReaderId">
+                Select reader:
+            </h:outputLabel>
+            <h:selectOneMenu id="editLoanReaderId" value="#{loans.editLoanReaderId}" required="true">
+                <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+                <f:selectItems value="#{loans.readersIds}"/>
+                <f:ajax event="change" render="validationMessages"/>
+            </h:selectOneMenu><br/>
+
+            <h:outputLabel for="editLoanBeginDate">
+                Enter begin date:
+            </h:outputLabel>
+            <h:inputText a:type="date" id="editLoanBeginDate" value="#{loans.editLoan.beginDate}">
+                <f:convertDateTime pattern="yyyy-MM-dd"/>
+            </h:inputText><br/>
+
+            <h:outputLabel for="editLoanEndDate">
+                Enter end date:
+            </h:outputLabel>
+            <h:inputText a:type="date" id="editLoanEndDate" value="#{loans.editLoan.endDate}">
+                <f:convertDateTime pattern="yyyy-MM-dd"/>
+            </h:inputText><br/>
+
+            <h:commandButton type="submit" value="Edit loan" action="#{loans.editLoanInDAO}">
+                <f:ajax execute="@form" render="loansForm @form"/>
+            </h:commandButton><br/>
+        </h:panelGroup>
+
+    </h:form>
+</h:body>
+</html>

@@ -1,4 +1,4 @@
-package app;
+package app.beans;
 
 import app.dao.AuthorsDAO;
 import app.model.Author;

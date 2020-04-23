@@ -11,6 +11,8 @@
         <class>app.model.Author</class>
         <class>app.model.Category</class>
         <class>app.model.Reader</class>
+        <class>app.model.Catalog</class>
+        <class>app.model.Loan</class>
         <properties>
             <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/soa"/>
             <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>

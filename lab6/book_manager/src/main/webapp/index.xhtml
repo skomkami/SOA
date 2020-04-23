@@ -13,7 +13,7 @@
 </h:head>
 
 <h:body>
-
+    <a href="loans.xhtml">Loans</a>
     <h1>Books</h1>
     <h:form id="booksForm">
         <h:dataTable value="#{books.booksList}" var="book">
@@ -38,7 +38,6 @@
                 <f:facet name = "header">Author</f:facet>
                 #{book.author.firstName} #{book.author.lastName}
             </h:column>
-
 
             <h:column>
                 <f:facet name = "header">Category</f:facet>
