@@ -67,21 +67,21 @@
         <h:inputText id="addTitle" value="#{books.addBook.title}" pt:placeholder="Title">
         </h:inputText><br/>
 
-        <h:outputLabel for="authorIdBook">
+        <h:outputLabel for="addBookAuthor">
             Select author:
         </h:outputLabel>
-        <h:selectOneMenu id="authorIdBook" value="#{books.addBookAuthorId}" required="true">
+        <h:selectOneMenu id="addBookAuthor" value="#{books.addBook.author}" converter="authorConverter" required="true">
             <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-            <f:selectItems value="#{books.authorsIds}"/>
-            <f:ajax event="change" render="validationMessages additionalInformation"/>
+            <f:selectItems value="#{AuthorsDAO.all}" var="a" itemValue="#{a}" itemLabel="#{a.firstName.concat(' ').concat(a.lastName)}"/>
+            <f:ajax event="change" render="validationMessages"/>
         </h:selectOneMenu><br/>
 
         <h:outputLabel for="categoryIdBook">
             Select category:
         </h:outputLabel>
-        <h:selectOneMenu id="categoryIdBook" value="#{books.addBookCategoryId}" required="true">
+        <h:selectOneMenu id="categoryIdBook" value="#{books.addBook.category}" converter="categoryConverter" required="true">
             <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-            <f:selectItems value="#{books.categoriesIds}"/>
+            <f:selectItems value="#{CategoriesDAO.all}" var="c" itemValue="#{c}" itemLabel="#{''.concat(c.id).concat('. ').concat(c.name)}"/>
             <f:ajax event="change" render="validationMessages"/>
         </h:selectOneMenu><br/>
 
@@ -113,20 +113,20 @@
             </h:inputText><br/>
 
             <h:outputLabel for="authorIdEditBook">
-                Author id:
+                Author:
             </h:outputLabel>
-            <h:selectOneMenu id="authorIdEditBook" value="#{books.editBookAuthorId}" required="true">
+            <h:selectOneMenu id="authorIdEditBook" value="#{books.editBook.author}" converter="authorConverter" required="true">
                 <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-                <f:selectItems value="#{books.authorsIds}"/>
-                <f:ajax event="change" render="validationMessages additionalInformation"/>
+                <f:selectItems value="#{AuthorsDAO.all}" var="a" itemValue="#{a}" itemLabel="#{a.firstName.concat(' ').concat(a.lastName)}"/>
+                <f:ajax event="change" render="validationMessages"/>
             </h:selectOneMenu><br/>
 
             <h:outputLabel for="categoryIdEditBook">
                 Category id:
             </h:outputLabel>
-            <h:selectOneMenu id="categoryIdEditBook" value="#{books.editBookCategoryId}" required="true">
+            <h:selectOneMenu id="categoryIdEditBook" value="#{books.editBook.category}" converter="categoryConverter" required="true">
                 <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-                <f:selectItems value="#{books.categoriesIds}"/>
+                <f:selectItems value="#{CategoriesDAO.all}" var="c" itemValue="#{c}" itemLabel="#{''.concat(c.id).concat('. ').concat(c.name)}"/>
                 <f:ajax event="change" render="validationMessages"/>
             </h:selectOneMenu><br/>
 

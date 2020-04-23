@@ -1,15 +1,9 @@
 package app.beans;
 
-import app.dao.AuthorsDAO;
 import app.dao.BooksDAO;
-import app.dao.CategoriesDAO;
-import app.model.Author;
 import app.model.Book;
-import app.model.Category;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -28,20 +22,6 @@ public class Books implements Serializable {
     @Inject
     private BooksDAO booksDAO;
 
-    @Inject
-    private AuthorsDAO authorsDAO;
-
-    @Inject
-    private CategoriesDAO categoriesDAO;
-
-    public List<Integer> getAuthorsIds() {
-        return authorsDAO.getAll().stream().map(a -> a.getId()).collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    public List<Integer> getCategoriesIds() {
-        return categoriesDAO.getAll().stream().map(c -> c.getId()).collect(Collectors.toCollection(ArrayList::new));
-    }
-
     public List<Book> getBooksList() {
         return booksDAO.getAll();
     }
@@ -57,45 +37,6 @@ public class Books implements Serializable {
         } catch (Exception e) {
 
         }
-    }
-
-    private Integer addBookAuthorId;
-    private Integer addBookCategoryId;
-
-    public Integer getAddBookAuthorId() {
-        return addBookAuthorId;
-    }
-
-    public void setAddBookAuthorId(Integer addBookAuthorId) {
-        this.addBookAuthorId = addBookAuthorId;
-    }
-
-    public Integer getAddBookCategoryId() {
-        return addBookCategoryId;
-    }
-
-    public void setAddBookCategoryId(Integer addBookCategoryId) {
-        this.addBookCategoryId = addBookCategoryId;
-    }
-
-
-    private Integer editBookAuthorId;
-    private Integer editBookCategoryId;
-
-    public Integer getEditBookAuthorId() {
-        return editBookAuthorId;
-    }
-
-    public void setEditBookAuthorId(Integer editBookAuthorId) {
-        this.editBookAuthorId = editBookAuthorId;
-    }
-
-    public Integer getEditBookCategoryId() {
-        return editBookCategoryId;
-    }
-
-    public void setEditBookCategoryId(Integer editBookCategoryId) {
-        this.editBookCategoryId = editBookCategoryId;
     }
 
     public Map<Integer, Boolean> getCheckedBooks() {
@@ -128,8 +69,6 @@ public class Books implements Serializable {
     public void setEditBookId(Integer editBookId) {
         if ( editBookId != null ) {
             editBook = booksDAO.find(editBookId);
-            editBookAuthorId = editBook.getAuthor().getId();
-            editBookCategoryId = editBook.getCategory().getId();
         } else {
             editBook = null;
         }
@@ -147,18 +86,8 @@ public class Books implements Serializable {
         if ( this.addBook == null ) {
             System.err.println( "Book to insert is null");
         } else {
-
-            if (addBookAuthorId == null || addBookCategoryId == null) {
-                FacesContext context = FacesContext.getCurrentInstance();
-                context.addMessage("addBook", new FacesMessage("Set authorId and categoryId"));
-            } else {
-                Author author = authorsDAO.find(addBookAuthorId);
-                Category category = categoriesDAO.find(addBookCategoryId);
-                this.addBook.setAuthor(author);
-                this.addBook.setCategory(category);
-                booksDAO.add(this.addBook);
-                this.addBook = new Book();
-            }
+            booksDAO.add(this.addBook);
+            this.addBook = new Book();
         }
     }
 
@@ -171,16 +100,6 @@ public class Books implements Serializable {
     }
 
     public void editBookInDAO() {
-
-        if (this.editBookAuthorId != editBook.getAuthor().getId()) {
-            Author author = authorsDAO.find(editBookAuthorId);
-            editBook.setAuthor(author);
-        }
-        if (this.editBookCategoryId != editBook.getCategory().getId()) {
-            Category category = categoriesDAO.find(editBookCategoryId);
-            editBook.setCategory(category);
-        }
-
         booksDAO.edit(this.editBook);
         this.editBook = null;
         this.editBookId = null;

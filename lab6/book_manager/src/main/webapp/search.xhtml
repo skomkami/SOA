@@ -49,12 +49,13 @@
 
     </h:form>
 
+    <hr/>
     <h3>Get readers who read author in period</h3>
     <h:form id="readersWhoReadAuthor">
         <h:outputLabel for="authorForReadersWhoReadAuthor">
             Select author:
         </h:outputLabel>
-        <h:selectOneMenu id="authorForReadersWhoReadAuthor" value="#{search.authorForReaders}" converter="authorConverter">
+        <h:selectOneMenu id="authorForReadersWhoReadAuthor" value="#{search.authorForReaders}" converter="authorConverter" required="true">
             <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
             <f:selectItems value="#{authors.authorsList}" var="a" itemValue="#{a}" itemLabel="#{a.firstName.concat(' ').concat(a.lastName)}"/>
             <f:ajax event="change" render="@form" />
@@ -92,6 +93,81 @@
         </h:panelGroup>
 
     </h:form>
+
+    <hr/>
+    <h3>Get readers who read book in period</h3>
+    <h:form id="readersWhoReadBook">
+        <h:outputLabel for="bookForReadersWhoReadBook">
+            Select book:
+        </h:outputLabel>
+        <h:selectOneMenu id="bookForReadersWhoReadBook" value="#{search.bookForReadersWhoReadBook}" converter="bookConverter" required="true">
+            <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+            <f:selectItems value="#{BooksDAO.all}" var="b" itemValue="#{b}" itemLabel="#{''.concat(b.id).concat('. ').concat(b.title)}"/>
+            <f:ajax event="change" render="@form" />
+        </h:selectOneMenu><br/>
+
+        <h:outputLabel for="beginDateForUsersWhoReadBook">
+            Enter begin date:
+        </h:outputLabel>
+        <h:inputText a:type="date" id="beginDateForUsersWhoReadBook" value="#{search.startDateForReadersWhoReadBook}">
+            <f:convertDateTime pattern="yyyy-MM-dd"/>
+            <f:ajax event="change" render="@form"/>
+        </h:inputText><br/>
+
+        <h:outputLabel for="endDateForUsersWhoReadBook">
+            Enter end date:
+        </h:outputLabel>
+        <h:inputText a:type="date" id="endDateForUsersWhoReadBook" value="#{search.endDateForReadersWhoReadBook}">
+            <f:convertDateTime pattern="yyyy-MM-dd"/>
+            <f:ajax event="change" render="@form"/>
+        </h:inputText><br/>
+
+
+        <h:panelGroup rendered="#{search.readyToDisplayReadersWhoReadBookInPeriod}">
+            <h:dataTable value="#{search.readersWhoReadBookInPeriod}" var="reader">
+                <h:column>
+                    <f:facet name = "header">Id</f:facet>
+                    #{reader.id}
+                </h:column>
+
+                <h:column>
+                    <f:facet name = "header">Name</f:facet>
+                    #{reader.firstName} #{reader.lastName}
+                </h:column>
+            </h:dataTable>
+        </h:panelGroup>
+    </h:form>
+
+    <hr/>
+    <h3>Get authors read by reader</h3>
+    <h:form id="authorsReadBy">
+        <h:outputLabel for="readerForAuthorsReadBy">
+            Select reader:
+        </h:outputLabel>
+        <h:selectOneMenu id="readerForAuthorsReadBy" value="#{search.readerForAuthorsReadBy}" converter="readerConverter" required="true">
+            <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+            <f:selectItems value="#{ReadersDAO.all}" var="r" itemValue="#{r}" itemLabel="#{''.concat(r.id).concat('. ').concat(r.firstName).concat(' ').concat(r.lastName)}"/>
+            <f:ajax event="change" render="@form" />
+        </h:selectOneMenu><br/>
+
+        <h:panelGroup rendered="#{search.readerForAuthorsReadBy != null}">
+            <h:dataTable value="#{search.authorsReadByReader}" var="author">
+                <h:column>
+                    <f:facet name = "header">Id</f:facet>
+                    #{author.id}
+                </h:column>
+
+                <h:column>
+                    <f:facet name = "header">Name</f:facet>
+                    #{author.firstName} #{author.lastName}
+                </h:column>
+            </h:dataTable>
+        </h:panelGroup>
+    </h:form>
+
+    <hr/>
+    <h3>Favourite author</h3>
+    #{search.favouriteAuthor.id}. #{search.favouriteAuthor.firstName} #{search.favouriteAuthor.lastName}
 
 </h:body>
 </html>

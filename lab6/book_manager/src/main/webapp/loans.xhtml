@@ -140,9 +140,9 @@
         <h:outputLabel for="addCatalogBookId">
             Select book:
         </h:outputLabel>
-        <h:selectOneMenu id="addCatalogBookId" value="#{catalog.addCatalogBookId}" required="true">
+        <h:selectOneMenu id="addCatalogBookId" value="#{catalog.addCatalog.book}" converter="bookConverter" required="true">
             <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-            <f:selectItems value="#{catalog.booksIds}"/>
+            <f:selectItems value="#{BooksDAO.all}" var="b" itemValue="#{b}" itemLabel="#{''.concat(b.id).concat('. ').concat(b.title)}"/>
             <f:ajax event="change" render="validationMessagesCatalog"/>
         </h:selectOneMenu><br/>
 
@@ -160,7 +160,7 @@
     <h:form id="editCatalogForm">
 
         <h:outputLabel for="editReaderId">
-            Select reader to edit
+            Select catalog to edit
         </h:outputLabel>
         <h:selectOneMenu id="editCatalogId" value="#{catalog.editCatalogId}">
             <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
@@ -170,12 +170,12 @@
 
         <h:panelGroup rendered="#{catalog.inEditMode}">
 
-            <h:outputLabel for="editCatalogBookId">
+            <h:outputLabel for="editCatalogBook">
                 Select book:
             </h:outputLabel>
-            <h:selectOneMenu id="editCatalogBookId" value="#{catalog.editCatalogBookId}" required="true">
+            <h:selectOneMenu id="editCatalogBook" value="#{catalog.editCatalog.book}" converter="bookConverter" required="true">
                 <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-                <f:selectItems value="#{catalog.booksIds}"/>
+                <f:selectItems value="#{BooksDAO.all}" var="b" itemValue="#{b}" itemLabel="#{''.concat(b.id).concat('. ').concat(b.title)}"/>
                 <f:ajax event="change" render="validationMessagesCatalog"/>
             </h:selectOneMenu><br/>
 
@@ -240,22 +240,22 @@
     <h3>Add loan</h3>
     <h:form id="addLoan">
 
-        <h:outputLabel for="addLoanBookId">
+        <h:outputLabel for="addLoanBook">
             Select book:
         </h:outputLabel>
-        <h:selectOneMenu id="addLoanBookId" value="#{loans.addLoanBookId}" required="true">
+        <h:selectOneMenu id="addLoanBook" value="#{loans.addLoan.book}" converter="bookConverter" required="true">
             <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-            <f:selectItems value="#{loans.booksIds}"/>
+            <f:selectItems value="#{BooksDAO.all}" var="b" itemValue="#{b}" itemLabel="#{''.concat(b.id).concat('. ').concat(b.title)}"/>
             <f:ajax event="change" render="validationMessagesLoan"/>
         </h:selectOneMenu><br/>
 
-        <h:outputLabel for="addLoanReaderId">
+        <h:outputLabel for="addLoanReader">
             Select reader:
         </h:outputLabel>
-        <h:selectOneMenu id="addLoanReaderId" value="#{loans.addLoanReaderId}" required="true">
+        <h:selectOneMenu id="addLoanReader" value="#{loans.addLoan.reader}" converter="readerConverter" required="true">
             <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-            <f:selectItems value="#{loans.readersIds}"/>
-            <f:ajax event="change" render="validationMessages"/>
+            <f:selectItems value="#{ReadersDAO.all}" var="r" itemValue="#{r}" itemLabel="#{''.concat(r.id).concat('. ').concat(r.firstName).concat(' ').concat(r.lastName)}"/>
+            <f:ajax event="change" render="validationMessagesLoan"/>
         </h:selectOneMenu><br/>
 
         <h:outputLabel for="addLoanBeginDate">
@@ -293,22 +293,22 @@
 
         <h:panelGroup rendered="#{loans.inEditMode}">
 
-            <h:outputLabel for="editLoanBookId">
+            <h:outputLabel for="editLoanBook">
                 Select book:
             </h:outputLabel>
-            <h:selectOneMenu id="editLoanBookId" value="#{loans.editLoanBookId}" required="true">
+            <h:selectOneMenu id="editLoanBook" value="#{loans.editLoan.book}" converter="bookConverter" required="true">
                 <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-                <f:selectItems value="#{loans.booksIds}"/>
+                <f:selectItems value="#{BooksDAO.all}" var="b" itemValue="#{b}" itemLabel="#{''.concat(b.id).concat('. ').concat(b.title)}"/>
                 <f:ajax event="change" render="validationMessagesLoan"/>
             </h:selectOneMenu><br/>
 
-            <h:outputLabel for="editLoanReaderId">
+            <h:outputLabel for="editLoanReader">
                 Select reader:
             </h:outputLabel>
-            <h:selectOneMenu id="editLoanReaderId" value="#{loans.editLoanReaderId}" required="true">
+            <h:selectOneMenu id="editLoanReader" value="#{loans.editLoan.reader}" converter="readerConverter" required="true">
                 <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-                <f:selectItems value="#{loans.readersIds}"/>
-                <f:ajax event="change" render="validationMessages"/>
+                <f:selectItems value="#{ReadersDAO.all}" var="r" itemValue="#{r}" itemLabel="#{''.concat(r.id).concat('. ').concat(r.firstName).concat(' ').concat(r.lastName)}"/>
+                <f:ajax event="change" render="validationMessagesLoan"/>
             </h:selectOneMenu><br/>
 
             <h:outputLabel for="editLoanBeginDate">

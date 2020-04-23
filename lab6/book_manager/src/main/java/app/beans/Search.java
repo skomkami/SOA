@@ -23,15 +23,8 @@ public class Search extends EntityDAO {
     @Inject
     private BooksDAO booksDAO;
 
-    @Inject
-    private AuthorsDAO authorsDAO;
-
     public List<Book> getFoundBooks() {
         return booksDAO.getAll();
-    }
-
-    public List<Author> getAuthorsList() {
-        return authorsDAO.getAll();
     }
 
     private Author authorForReaders;
@@ -76,5 +69,73 @@ public class Search extends EntityDAO {
 
     public boolean isReadyToDisplayReadersWhoReadAuthorInPeriod() {
         return authorForReaders != null && startDateForReadersWhoReadAuthor != null && endDateForReadersWhoReadAuthor != null;
+    }
+
+    private Book bookForReadersWhoReadBook;
+
+    public Book getBookForReadersWhoReadBook() {
+        return bookForReadersWhoReadBook;
+    }
+
+    public void setBookForReadersWhoReadBook(Book bookForReadersWhoReadBook) {
+        this.bookForReadersWhoReadBook = bookForReadersWhoReadBook;
+    }
+
+    private java.util.Date startDateForReadersWhoReadBook;
+
+    public Date getStartDateForReadersWhoReadBook() {
+        return startDateForReadersWhoReadBook;
+    }
+
+    public void setStartDateForReadersWhoReadBook(Date startDateForReadersWhoReadBook) {
+        this.startDateForReadersWhoReadBook = startDateForReadersWhoReadBook;
+    }
+
+    public Date getEndDateForReadersWhoReadBook() {
+        return endDateForReadersWhoReadBook;
+    }
+
+    public void setEndDateForReadersWhoReadBook(Date endDateForReadersWhoReadBook) {
+        this.endDateForReadersWhoReadBook = endDateForReadersWhoReadBook;
+    }
+
+    private java.util.Date endDateForReadersWhoReadBook;
+
+    public boolean isReadyToDisplayReadersWhoReadBookInPeriod() {
+        return bookForReadersWhoReadBook != null && startDateForReadersWhoReadBook != null && endDateForReadersWhoReadBook != null;
+    }
+
+    public List<Reader> getReadersWhoReadBookInPeriod() {
+        String jpql = "SELECT l.reader FROM Loan l WHERE l.book = :book and (l.beginDate <= :endDate) and (:startDate <= l.endDate)";
+        TypedQuery<Reader> query = em.createQuery(jpql, Reader.class);
+        query.setParameter("book", bookForReadersWhoReadBook);
+        query.setParameter("startDate", startDateForReadersWhoReadBook);
+        query.setParameter("endDate", endDateForReadersWhoReadBook);
+
+        return query.getResultList();
+    }
+
+    private Reader readerForAuthorsReadBy;
+
+    public Reader getReaderForAuthorsReadBy() {
+        return readerForAuthorsReadBy;
+    }
+
+    public void setReaderForAuthorsReadBy(Reader readerForAuthorsReadBy) {
+        this.readerForAuthorsReadBy = readerForAuthorsReadBy;
+    }
+
+    public List<Author> getAuthorsReadByReader() {
+        String jpql = "SELECT l.book.author FROM Loan l WHERE l.reader = :reader";
+        TypedQuery<Author> query = em.createQuery(jpql, Author.class);
+        query.setParameter("reader", readerForAuthorsReadBy);
+        return query.getResultList();
+    }
+
+    public Author getFavouriteAuthor() {
+//        String jpql = "SELECT a FROM Author a WHERE EXISTS (SELECT a1, count(*) mycount FROM Loan l, Book b, Author a1 WHERE ORDER BY mycount DESC LIMIT 1) as foo";
+        String jpql = "SELECT a FROM Author a";
+        TypedQuery<Author> query = em.createQuery(jpql, Author.class);
+        return query.getResultList().get(0);
     }
 }

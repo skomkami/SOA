@@ -1,15 +1,9 @@
 package app.beans;
 
-import app.dao.BooksDAO;
 import app.dao.CatalogDAO;
-import app.model.Book;
 import app.model.Catalog;
-import app.model.Loan;
-import app.model.Reader;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -25,32 +19,6 @@ public class CatalogBean implements Serializable {
 
     @Inject
     private CatalogDAO catalogDAO;
-
-    @Inject
-    private BooksDAO booksDAO;
-
-    public List<Integer> getBooksIds() {
-        return booksDAO.getAll().stream().map(b -> b.getId()).collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    private Integer addCatalogBookId;
-    private Integer editCatalogBookId;
-
-    public Integer getAddCatalogBookId() {
-        return addCatalogBookId;
-    }
-
-    public void setAddCatalogBookId(Integer addCatalogBookId) {
-        this.addCatalogBookId = addCatalogBookId;
-    }
-
-    public Integer getEditCatalogBookId() {
-        return editCatalogBookId;
-    }
-
-    public void setEditCatalogBookId(Integer editCatalogBookId) {
-        this.editCatalogBookId = editCatalogBookId;
-    }
 
     public void deleteCatalog() {
         try {
@@ -101,7 +69,6 @@ public class CatalogBean implements Serializable {
     public void setEditCatalogId(Integer editCatalogId) {
         if ( editCatalogId != null ) {
             editCatalog = catalogDAO.find(editCatalogId);
-            editCatalogBookId = editCatalog.getBook().getId();
         } else {
             editCatalog = null;
         }
@@ -119,15 +86,8 @@ public class CatalogBean implements Serializable {
         if ( this.addCatalog == null ) {
             System.err.println( "Catalog to insert is null");
         } else {
-            if (addCatalogBookId == null) {
-                FacesContext context = FacesContext.getCurrentInstance();
-                context.addMessage("addCatalog", new FacesMessage("Set bookId"));
-            } else {
-                Book book = booksDAO.find(addCatalogBookId);
-                addCatalog.setBook(book);
-                catalogDAO.add(this.addCatalog);
-                this.addCatalog = new Catalog();
-            }
+            catalogDAO.add(this.addCatalog);
+            this.addCatalog = new Catalog();
         }
     }
 

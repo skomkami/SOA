@@ -1,6 +1,6 @@
 package app.converters;
 
-import app.beans.Authors;
+import app.dao.AuthorsDAO;
 import app.model.Author;
 
 import javax.el.ValueExpression;
@@ -13,14 +13,21 @@ import javax.faces.convert.FacesConverter;
 public class AuthorConverter implements Converter {
 
     @Override
-    public Object getAsObject(FacesContext ctx, UIComponent uiComponent, String authorId) {
+    public Object getAsObject(FacesContext ctx, UIComponent uiComponent, String author) {
         ValueExpression vex =
                 ctx.getApplication().getExpressionFactory()
                         .createValueExpression(ctx.getELContext(),
-                                "#{authors}", Authors.class);
+                                "#{AuthorsDAO}", AuthorsDAO.class);
 
-        Authors authors = (Authors)vex.getValue(ctx.getELContext());
-        return authors.getAuthor(Integer.valueOf(authorId.substring(0,1)));
+        int iend = author.indexOf('.');
+        String idSubstring;
+        if (iend != -1) {
+            idSubstring= author.substring(0 , iend);
+            AuthorsDAO authorsDAO = (AuthorsDAO) vex.getValue(ctx.getELContext());
+            return authorsDAO.find(Integer.valueOf(idSubstring));
+        } else {
+            return null;
+        }
     }
 
     @Override
