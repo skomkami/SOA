@@ -13,7 +13,9 @@
 </h:head>
 
 <h:body>
-    <a href="loans.xhtml">Loans</a>
+    <a href="loans.xhtml">Loans</a><br/>
+    <a href="search.xhtml">Books Search</a><br/>
+
     <h1>Books</h1>
     <h:form id="booksForm">
         <h:dataTable value="#{books.booksList}" var="book">
@@ -140,7 +142,7 @@
     </h:form>
 
 <!--    Authors  section-->
-    <hr/><hr/>
+    <hr class="bold-line"/>
     <h1>Authors</h1>
     <h:form id="authorsForm">
         <h:dataTable value="#{authors.authorsList}" var="author">
@@ -220,7 +222,7 @@
     </h:form>
 
     <!--    Categories  section-->
-    <hr/><hr/>
+    <hr class="bold-line"/>
     <h1>Categories</h1>
     <h:form id="categoriesForm">
         <h:dataTable value="#{categories.categoriesList}" var="category">

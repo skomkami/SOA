@@ -1,5 +1,7 @@
 package app.model;
 
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.persistence.*;
 import java.io.Serializable;
 

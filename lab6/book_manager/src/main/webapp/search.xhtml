@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+<h:head>
+    <title>Library</title>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+</h:head>
+
+<h:body>
+    <a href="index.xhtml">Books</a><br/>
+    <a href="loans.xhtml">Loans</a><br/>
+
+    <h1>Books</h1>
+    <h:form id="foundBooksForm">
+        <h:dataTable value="#{search.foundBooks}" var="book">
+            <h:column>
+                <f:facet name = "header">Id</f:facet>
+                #{book.id}
+            </h:column>
+
+            <h:column>
+                <f:facet name = "header">Title</f:facet>
+                #{book.title}
+            </h:column>
+
+            <h:column>
+                <f:facet name = "header">Author</f:facet>
+                #{book.author.firstName} #{book.author.lastName}
+            </h:column>
+
+            <h:column>
+                <f:facet name = "header">Category</f:facet>
+                #{book.category.name}
+            </h:column>
+
+            <h:column>
+                <f:facet name = "header">Isbn</f:facet>
+                #{book.isbn}
+            </h:column>
+        </h:dataTable>
+
+        <h:messages id="validationMessages" styleClass="error"/>
+
+    </h:form>
+
+    <h3>Get readers who read author in period</h3>
+    <h:form id="readersWhoReadAuthor">
+        <h:outputLabel for="authorForReadersWhoReadAuthor">
+            Select author:
+        </h:outputLabel>
+        <h:selectOneMenu id="authorForReadersWhoReadAuthor" value="#{search.authorForReaders}" converter="authorConverter">
+            <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+            <f:selectItems value="#{authors.authorsList}" var="a" itemValue="#{a}" itemLabel="#{a.firstName.concat(' ').concat(a.lastName)}"/>
+            <f:ajax event="change" render="@form" />
+        </h:selectOneMenu><br/>
+
+        <h:outputLabel for="beginDateForUsersWhoReadAuthor">
+            Enter begin date:
+        </h:outputLabel>
+        <h:inputText a:type="date" id="beginDateForUsersWhoReadAuthor" value="#{search.startDateForReadersWhoReadAuthor}">
+            <f:convertDateTime pattern="yyyy-MM-dd"/>
+            <f:ajax event="change" render="@form"/>
+        </h:inputText><br/>
+
+        <h:outputLabel for="endDateForUsersWhoReadAuthor">
+            Enter end date:
+        </h:outputLabel>
+        <h:inputText a:type="date" id="endDateForUsersWhoReadAuthor" value="#{search.endDateForReadersWhoReadAuthor}">
+            <f:convertDateTime pattern="yyyy-MM-dd"/>
+            <f:ajax event="change" render="@form"/>
+        </h:inputText><br/>
+
+
+        <h:panelGroup rendered="#{search.readyToDisplayReadersWhoReadAuthorInPeriod}">
+            <h:dataTable value="#{search.readersWhoReadBookFromAuthorInPeriod}" var="reader">
+                <h:column>
+                    <f:facet name = "header">Id</f:facet>
+                    #{reader.id}
+                </h:column>
+
+                <h:column>
+                    <f:facet name = "header">Name</f:facet>
+                    #{reader.firstName} #{reader.lastName}
+                </h:column>
+            </h:dataTable>
+        </h:panelGroup>
+
+    </h:form>
+
+</h:body>
+</html>

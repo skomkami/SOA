@@ -29,6 +29,10 @@ public class Authors implements Serializable {
         }
     }
 
+    public Author getAuthor(int id) {
+        return authorsDAO.findAuthor(id);
+    }
+
     private Map<Integer, Boolean> checkedAuthors = new HashMap<Integer, Boolean>();
 
     public Map<Integer, Boolean> getCheckedAuthors() {
