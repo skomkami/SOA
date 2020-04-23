@@ -3,7 +3,7 @@ package app;
 import app.dao.BooksDAO;
 import app.model.Book;
 
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Named("books")
-@SessionScoped
+@ApplicationScoped
 public class Books implements Serializable {
 
     private Map<Integer, Boolean> checked = new HashMap<Integer, Boolean>();
