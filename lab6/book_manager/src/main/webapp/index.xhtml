@@ -18,12 +18,12 @@
 
     <h1>Books</h1>
     <h:form id="booksForm">
-        <h:dataTable value="#{books.booksList}" var="book">
+        <h:dataTable value="#{books.listOfAll}" var="book">
             <h:column>
                 <f:facet name="header">
                     <h:outputText value="Select" />
                 </f:facet>
-                <h:selectBooleanCheckbox value="#{books.checkedBooks[book.id]}" />
+                <h:selectBooleanCheckbox value="#{books.checkedMap[book.id]}" />
             </h:column>
 
             <h:column>
@@ -52,8 +52,8 @@
             </h:column>
         </h:dataTable>
 
-        <h:commandButton type="submit" id="submit" value="Delete selected" action="#{books.deleteBook}">
-            <f:ajax execute="@form" render="booksForm editForm"/>
+        <h:commandButton type="submit" id="submit" value="Delete selected" action="#{books.delete}">
+            <f:ajax execute="@form" render="@form editBookForm addBookForm"/>
         </h:commandButton>
         <h:messages id="validationMessages" styleClass="error"/>
 
@@ -62,15 +62,15 @@
     <hr/>
 
     <h3>Add book</h3>
-    <h:form id="addBook">
+    <h:form id="addBookForm">
 
-        <h:inputText id="addTitle" value="#{books.addBook.title}" pt:placeholder="Title">
+        <h:inputText id="addTitle" value="#{books.addEntity.title}" pt:placeholder="Title">
         </h:inputText><br/>
 
         <h:outputLabel for="addBookAuthor">
             Select author:
         </h:outputLabel>
-        <h:selectOneMenu id="addBookAuthor" value="#{books.addBook.author}" converter="authorConverter" required="true">
+        <h:selectOneMenu id="addBookAuthor" value="#{books.addEntity.author}" converter="authorConverter" required="true">
             <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
             <f:selectItems value="#{AuthorsDAO.all}" var="a" itemValue="#{a}" itemLabel="#{a.firstName.concat(' ').concat(a.lastName)}"/>
             <f:ajax event="change" render="validationMessages"/>
@@ -79,16 +79,16 @@
         <h:outputLabel for="categoryIdBook">
             Select category:
         </h:outputLabel>
-        <h:selectOneMenu id="categoryIdBook" value="#{books.addBook.category}" converter="categoryConverter" required="true">
+        <h:selectOneMenu id="categoryIdBook" value="#{books.addEntity.category}" converter="categoryConverter" required="true">
             <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
             <f:selectItems value="#{CategoriesDAO.all}" var="c" itemValue="#{c}" itemLabel="#{''.concat(c.id).concat('. ').concat(c.name)}"/>
             <f:ajax event="change" render="validationMessages"/>
         </h:selectOneMenu><br/>
 
-        <h:inputText id="addIsbn" value="#{books.addBook.isbn}" pt:placeholder="Isbn">
+        <h:inputText id="addIsbn" value="#{books.addEntity.isbn}" pt:placeholder="Isbn">
         </h:inputText><br/>
 
-        <h:commandButton type="submit" value="Add book" action="#{books.insertBook}">
+        <h:commandButton type="submit" value="Add book" action="#{books.insertEntity}">
             <f:ajax execute="@form" render="booksForm editBookForm @form"/>
         </h:commandButton><br/>
     </h:form>
@@ -101,21 +101,21 @@
         <h:outputLabel for="editBookId">
             Select book to edit
         </h:outputLabel>
-        <h:selectOneMenu id="editBookId" value="#{books.editBookId}">
+        <h:selectOneMenu id="editBookId" value="#{books.editEntityId}">
             <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-            <f:selectItems value="#{books.booksIds}"/>
+            <f:selectItems value="#{books.entitiesIds}"/>
             <f:ajax event="change" render="editBookForm" />
         </h:selectOneMenu><br/>
 
         <h:panelGroup rendered="#{books.inEditMode}">
 
-            <h:inputText id="editTitle" value="#{books.editBook.title}" pt:placeholder="Title">
+            <h:inputText id="editTitle" value="#{books.editEntity.title}" pt:placeholder="Title">
             </h:inputText><br/>
 
             <h:outputLabel for="authorIdEditBook">
                 Author:
             </h:outputLabel>
-            <h:selectOneMenu id="authorIdEditBook" value="#{books.editBook.author}" converter="authorConverter" required="true">
+            <h:selectOneMenu id="authorIdEditBook" value="#{books.editEntity.author}" converter="authorConverter" required="true">
                 <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
                 <f:selectItems value="#{AuthorsDAO.all}" var="a" itemValue="#{a}" itemLabel="#{a.firstName.concat(' ').concat(a.lastName)}"/>
                 <f:ajax event="change" render="validationMessages"/>
@@ -124,16 +124,16 @@
             <h:outputLabel for="categoryIdEditBook">
                 Category id:
             </h:outputLabel>
-            <h:selectOneMenu id="categoryIdEditBook" value="#{books.editBook.category}" converter="categoryConverter" required="true">
+            <h:selectOneMenu id="categoryIdEditBook" value="#{books.editEntity.category}" converter="categoryConverter" required="true">
                 <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
                 <f:selectItems value="#{CategoriesDAO.all}" var="c" itemValue="#{c}" itemLabel="#{''.concat(c.id).concat('. ').concat(c.name)}"/>
                 <f:ajax event="change" render="validationMessages"/>
             </h:selectOneMenu><br/>
 
-            <h:inputText id="editIsbn" value="#{books.editBook.isbn}" pt:placeholder="Isbn">
+            <h:inputText id="editIsbn" value="#{books.editEntity.isbn}" pt:placeholder="Isbn">
             </h:inputText><br/>
 
-            <h:commandButton type="submit" value="Edit book" action="#{books.editBookInDAO}">
+            <h:commandButton type="submit" value="Edit book" action="#{books.editEntityInDAO}">
                 <f:ajax execute="@form" render="booksForm @form"/>
             </h:commandButton><br/>
         </h:panelGroup>
@@ -145,12 +145,12 @@
     <hr class="bold-line"/>
     <h1>Authors</h1>
     <h:form id="authorsForm">
-        <h:dataTable value="#{authors.authorsList}" var="author">
+        <h:dataTable value="#{authors.listOfAll}" var="author">
             <h:column>
                 <f:facet name="header">
                     <h:outputText value="Select" />
                 </f:facet>
-                <h:selectBooleanCheckbox value="#{authors.checkedAuthors[author.id]}" />
+                <h:selectBooleanCheckbox value="#{authors.checkedMap[author.id]}" />
             </h:column>
 
             <h:column>
@@ -169,8 +169,8 @@
             </h:column>
         </h:dataTable>
 
-        <h:commandButton type="submit" id="submitAuthor" value="Delete selected" action="#{authors.deleteAuthor}">
-            <f:ajax execute="@form" render="authorsForm editForm"/>
+        <h:commandButton type="submit" id="submitAuthor" value="Delete selected" action="#{authors.delete}">
+            <f:ajax execute="@form" render="authorsForm editAuthorForm"/>
         </h:commandButton>
         <h:messages id="validationMessagesAuthor" styleClass="error"/>
 
@@ -179,16 +179,16 @@
     <hr/>
 
     <h3>Add author</h3>
-    <h:form id="addAuthor">
+    <h:form id="addAuthorForm">
 
-        <h:inputText id="addAuthorFirstName" value="#{authors.addAuthor.firstName}" pt:placeholder="Author first name">
+        <h:inputText id="addAuthorFirstName" value="#{authors.addEntity.firstName}" pt:placeholder="Author first name">
         </h:inputText><br/>
 
-        <h:inputText id="addAuthorLastName" value="#{authors.addAuthor.lastName}" pt:placeholder="Author last name">
+        <h:inputText id="addAuthorLastName" value="#{authors.addEntity.lastName}" pt:placeholder="Author last name">
         </h:inputText><br/>
 
-        <h:commandButton type="submit" value="Add author" action="#{authors.insertAuthor}">
-            <f:ajax execute="@form" render="authorsForm addBook editAuthorForm @form"/>
+        <h:commandButton type="submit" value="Add author" action="#{authors.insertEntity}">
+            <f:ajax execute="@form" render="authorsForm addBookForm editBookForm editAuthorForm @form"/>
         </h:commandButton><br/>
     </h:form>
 
@@ -200,22 +200,22 @@
         <h:outputLabel for="editAuthorId">
             Select author to edit
         </h:outputLabel>
-        <h:selectOneMenu id="editAuthorId" value="#{authors.editAuthorId}">
+        <h:selectOneMenu id="editAuthorId" value="#{authors.editEntityId}">
             <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-            <f:selectItems value="#{authors.authorsIds}"/>
+            <f:selectItems value="#{authors.entitiesIds}"/>
             <f:ajax event="change" render="editAuthorForm" />
         </h:selectOneMenu><br/>
 
         <h:panelGroup rendered="#{authors.inEditMode}">
 
-            <h:inputText id="editFirstName" value="#{authors.editAuthor.firstName}" pt:placeholder="First name">
+            <h:inputText id="editFirstName" value="#{authors.editEntity.firstName}" pt:placeholder="First name">
             </h:inputText><br/>
 
-            <h:inputText id="editLastName" value="#{authors.editAuthor.lastName}" pt:placeholder="Last name">
+            <h:inputText id="editLastName" value="#{authors.editEntity.lastName}" pt:placeholder="Last name">
             </h:inputText><br/>
 
-            <h:commandButton type="submit" value="Edit author" action="#{authors.editAuthorInDAO}">
-                <f:ajax execute="@form" render="authorsForm booksForm @form"/>
+            <h:commandButton type="submit" value="Edit author" action="#{authors.editEntityInDAO}">
+                <f:ajax execute="@form" render="authorsForm booksForm booksEditForm booksAddForm @form"/>
             </h:commandButton><br/>
         </h:panelGroup>
 
@@ -225,12 +225,12 @@
     <hr class="bold-line"/>
     <h1>Categories</h1>
     <h:form id="categoriesForm">
-        <h:dataTable value="#{categories.categoriesList}" var="category">
+        <h:dataTable value="#{categories.listOfAll}" var="category">
             <h:column>
                 <f:facet name="header">
                     <h:outputText value="Select" />
                 </f:facet>
-                <h:selectBooleanCheckbox value="#{categories.checkedCategories[category.id]}" />
+                <h:selectBooleanCheckbox value="#{categories.checkedMap[category.id]}" />
             </h:column>
 
             <h:column>
@@ -244,8 +244,8 @@
             </h:column>
         </h:dataTable>
 
-        <h:commandButton type="submit" id="submitCategory" value="Delete selected" action="#{categories.deleteCategory}">
-            <f:ajax execute="@form" render="authorsForm editForm"/>
+        <h:commandButton type="submit" id="submitCategory" value="Delete selected" action="#{categories.delete}">
+            <f:ajax execute="@form" render="authorsForm editCategoryForm @form"/>
         </h:commandButton>
         <h:messages id="validationMessagesCategory" styleClass="error"/>
 
@@ -254,13 +254,13 @@
     <hr/>
 
     <h3>Add category</h3>
-    <h:form id="addCategory">
+    <h:form id="addCategoryForm">
 
-        <h:inputText id="addCategoryName" value="#{categories.addCategory.name}" pt:placeholder="Category name">
+        <h:inputText id="addCategoryName" value="#{categories.addEntity.name}" pt:placeholder="Category name">
         </h:inputText><br/>
 
-        <h:commandButton type="submit" value="Add category" action="#{categories.insertCategory}">
-            <f:ajax execute="@form" render="categoriesForm addBook editCategoryForm @form"/>
+        <h:commandButton type="submit" value="Add category" action="#{categories.insertEntity}">
+            <f:ajax execute="@form" render="categoriesForm addBookForm editCategoryForm @form"/>
         </h:commandButton><br/>
     </h:form>
 
@@ -271,18 +271,18 @@
         <h:outputLabel for="editCategoryId">
             Select category to edit
         </h:outputLabel>
-        <h:selectOneMenu id="editCategoryId" value="#{categories.editCategoryId}">
+        <h:selectOneMenu id="editCategoryId" value="#{categories.editEntityId}">
             <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-            <f:selectItems value="#{categories.categoriesIds}"/>
+            <f:selectItems value="#{categories.entitiesIds}"/>
             <f:ajax event="change" render="editCategoryForm" />
         </h:selectOneMenu><br/>
 
         <h:panelGroup rendered="#{categories.inEditMode}">
 
-            <h:inputText id="editName" value="#{categories.editCategory.name}" pt:placeholder="Name">
+            <h:inputText id="editName" value="#{categories.editEntity.name}" pt:placeholder="Name">
             </h:inputText><br/>
 
-            <h:commandButton type="submit" value="Edit category" action="#{categories.editCategoryInDAO}">
+            <h:commandButton type="submit" value="Edit category" action="#{categories.editEntityInDAO}">
                 <f:ajax execute="@form" render="booksForm categoriesForm @form"/>
             </h:commandButton><br/>
         </h:panelGroup>
