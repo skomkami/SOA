@@ -2,11 +2,12 @@ package app.beans;
 
 import app.model.Author;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 
+import javax.enterprise.context.SessionScoped;
+
 @Named("authors")
-@ApplicationScoped
+@SessionScoped
 public class Authors extends GenericBean<Author> {
 
 }

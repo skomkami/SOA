@@ -5,15 +5,16 @@ import app.model.Author;
 import app.model.Book;
 import app.model.Reader;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.TypedQuery;
 import java.util.Date;
 import java.util.List;
 
+import javax.enterprise.context.SessionScoped;
+
 @Named("search")
-@ApplicationScoped
+@SessionScoped
 public class Search extends EntityDAO {
 
     public Search() {

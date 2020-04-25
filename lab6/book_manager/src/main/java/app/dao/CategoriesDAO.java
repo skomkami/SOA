@@ -2,11 +2,10 @@ package app.dao;
 
 import app.model.Category;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
-
 @Named("CategoriesDAO")
-@ApplicationScoped
+@SessionScoped
 public class CategoriesDAO extends GenericEntityDAO<Category> {
 
     public CategoriesDAO() {

@@ -2,11 +2,12 @@ package app.beans;
 
 import app.model.Catalog;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 
+import javax.enterprise.context.SessionScoped;
+
 @Named("catalog")
-@ApplicationScoped
+@SessionScoped
 public class CatalogBean extends GenericBean<Catalog> {
 
 }

@@ -2,11 +2,12 @@ package app.beans;
 
 import app.model.Book;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 
+import javax.enterprise.context.SessionScoped;
+
 @Named("books")
-@ApplicationScoped
+@SessionScoped
 public class Books extends GenericBean<Book> {
 
 }

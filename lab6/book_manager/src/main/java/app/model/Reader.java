@@ -6,7 +6,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "readers")
-public class Reader extends IdentifiableEntity {
+public class Reader extends IdentifiableVersionedEntity {
 
     @Column(name = "first_name", nullable = false)
     private String firstName;

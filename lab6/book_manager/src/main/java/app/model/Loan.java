@@ -5,7 +5,7 @@ import java.util.Date;
 
 @Table( name = "loans")
 @Entity
-public class Loan extends IdentifiableEntity{
+public class Loan extends IdentifiableVersionedEntity {
 
     @ManyToOne
     @JoinColumn(name = "book_id")

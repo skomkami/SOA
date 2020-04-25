@@ -1,11 +1,14 @@
 package app.beans;
 
 import app.dao.GenericEntityDAO;
-import app.model.Category;
-import app.model.IdentifiableEntity;
+
+import app.model.IdentifiableVersionedEntity;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.persistence.OptimisticLockException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public abstract class GenericBean<T extends IdentifiableEntity> implements Serializable {
+public abstract class GenericBean<T extends IdentifiableVersionedEntity> implements Serializable {
 
     private T createContents() {
         try {
@@ -110,9 +113,16 @@ public abstract class GenericBean<T extends IdentifiableEntity> implements Seria
     }
 
     public void editEntityInDAO() {
-        dao.edit(this.editEntity);
-        this.editEntity = null;
-        this.editEntityId = null;
+        try {
+            dao.edit(this.editEntity);
+            this.editEntity = null;
+            this.editEntityId = null;
+        } catch (Exception e) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            String entityClass = dao.getPersistentClass().getName();
+            context.addMessage("Edit" + entityClass, new FacesMessage("Error during updating " + entityClass.toLowerCase() + ". Someone else modified entity in the mean time. Please try again"));
+            this.editEntity = dao.find(editEntityId);
+        }
     }
 
 }

@@ -4,14 +4,15 @@ import app.dao.CatalogDAO;
 import app.model.Catalog;
 import app.model.Loan;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import javax.enterprise.context.SessionScoped;
+
 @Named("loans")
-@ApplicationScoped
+@SessionScoped
 public class Loans extends GenericBean<Loan> {
 
     @Inject

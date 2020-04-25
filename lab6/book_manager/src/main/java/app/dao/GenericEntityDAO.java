@@ -1,16 +1,14 @@
 package app.dao;
 
-import app.model.IdentifiableEntity;
+import app.model.IdentifiableVersionedEntity;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.Query;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class GenericEntityDAO<T extends IdentifiableEntity> {
+public abstract class GenericEntityDAO<T extends IdentifiableVersionedEntity> implements Serializable {
 
     protected EntityManagerFactory factory;
     protected EntityManager em;
@@ -18,12 +16,15 @@ public abstract class GenericEntityDAO<T extends IdentifiableEntity> {
     public GenericEntityDAO() {
         factory = Persistence.createEntityManagerFactory("NewPersistenceUnit");
         em = factory.createEntityManager();
-        try {
+
+        if ( getClass().getGenericSuperclass() instanceof ParameterizedType) {
             this.persistentClass = (Class<T>) ((ParameterizedType) getClass()
                     .getGenericSuperclass()).getActualTypeArguments()[0];
-        } catch (ClassCastException e) {
+        } else if ( getClass().getSuperclass().getGenericSuperclass() instanceof ParameterizedType) {
             this.persistentClass = (Class<T>) ((ParameterizedType) getClass().getSuperclass()
                     .getGenericSuperclass()).getActualTypeArguments()[0];
+        } else {
+            throw new ClassCastException("Count cast entity DAO to ParameterizedType");
         }
     }
 
@@ -47,43 +48,64 @@ public abstract class GenericEntityDAO<T extends IdentifiableEntity> {
 
     public void add(T entity) {
         try {
-            em.getTransaction().begin();
+            beginTransaction();
             em.persist(entity);
-            em.getTransaction().commit();
+            commitTransaction();
             System.out.println(getPersistentClass().getName() + " with id: " + entity.getId() + " written into database");
         }
         catch(Exception e) {
-            em.getTransaction().rollback();
+            rollbackTransaction();
             System.err.println("Error during record insert: " + e);
         }
     }
 
     public void remove(T entity) {
         try {
-            em.getTransaction().begin();
+            beginTransaction();
             em.remove(entity);
-            em.getTransaction().commit();
+            commitTransaction();
             System.out.println(getPersistentClass().getName() + " with id: " + entity.getId() + " removed from database");
         } catch (Exception e) {
-            em.getTransaction().rollback();
+            rollbackTransaction();
             System.err.println("Error while removing " + getPersistentClass().getName().toLowerCase() + " with id: " + entity.getId());
         }
     }
 
     public void edit(T entity) {
+        em.merge(entity);
         try {
-            em.getTransaction().begin();
-            em.merge(entity);
-            em.getTransaction().commit();
-            System.out.println("Successfully updated " + getPersistentClass().getName().toLowerCase() + " with id: " + entity.getId());
+            commitTransaction();
+            System.out.println("Successfully updated " + getPersistentClass().getName() + " with id: " + entity.getId());
         } catch (Exception e) {
+            rollbackTransaction();
+            throw e;
+        }
+    }
+
+    public void beginTransaction() {
+        if(!em.getTransaction().isActive())
+            em.getTransaction().begin();
+    }
+
+    public void commitTransaction() {
+        if( em.getTransaction().isActive()) {
+            em.getTransaction().commit();
+            em.getTransaction().begin();
+        }
+    }
+
+    public void rollbackTransaction() {
+        if(em.getTransaction().isActive()) {
             em.getTransaction().rollback();
-            System.err.println("Error while updating " + getPersistentClass().getName().toLowerCase() +" with id: " + entity.getId());
+            em.getTransaction().begin();
         }
     }
 
     public T find(int id) {
-        return em.find(getPersistentClass(), id);
+        beginTransaction();
+        T entity = em.find(getPersistentClass(), id);
+        em.lock(entity, LockModeType.OPTIMISTIC);
+        return entity;
     }
 
 }

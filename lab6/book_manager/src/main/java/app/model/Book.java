@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "books")
-public class Book extends IdentifiableEntity {
+public class Book extends IdentifiableVersionedEntity {
 
     @Column(name = "title", nullable = false)
     private String title;

@@ -2,12 +2,11 @@ package app.dao;
 
 import app.model.Catalog;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import javax.persistence.TypedQuery;
-
 @Named("CatalogDAO")
-@ApplicationScoped
+@SessionScoped
 public class CatalogDAO extends GenericEntityDAO<Catalog> {
     public CatalogDAO() {
         super();

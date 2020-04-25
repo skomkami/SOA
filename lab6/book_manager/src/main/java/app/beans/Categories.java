@@ -2,10 +2,11 @@ package app.beans;
 
 import app.model.Category;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 
+import javax.enterprise.context.SessionScoped;
+
 @Named("categories")
-@ApplicationScoped
+@SessionScoped
 public class Categories extends GenericBean<Category> {
 }

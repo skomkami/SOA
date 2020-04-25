@@ -6,7 +6,7 @@ import javax.persistence.Table;
 
 @Table( name = "categories")
 @Entity
-public class Category extends IdentifiableEntity {
+public class Category extends IdentifiableVersionedEntity {
 
     @Column(name = "name", nullable = false)
     private String name;

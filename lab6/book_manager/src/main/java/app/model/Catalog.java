@@ -5,7 +5,7 @@ import javax.validation.constraints.Min;
 
 @Table( name = "catalog")
 @Entity
-public class Catalog extends IdentifiableEntity {
+public class Catalog extends IdentifiableVersionedEntity {
 
     @OneToOne
     @JoinColumn(name = "book_id", unique = true)
