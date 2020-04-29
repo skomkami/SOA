@@ -32,7 +32,13 @@ public class Loans extends GenericBean<Loan> {
             }
 
             catalog.setInStock(catalog.getInStock() - 1 );
-            catalogDAO.edit(catalog);
+            try {
+                catalogDAO.edit(catalog);
+            } catch (Exception e) {
+                FacesContext context = FacesContext.getCurrentInstance();
+                context.addMessage("addLoan", new FacesMessage("There are no books left in stock. Somebody got one before you."));
+                return;
+            }
             dao.add(this.addEntity);
             this.addEntity = new Loan();
 
