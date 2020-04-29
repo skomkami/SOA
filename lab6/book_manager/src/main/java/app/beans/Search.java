@@ -1,17 +1,15 @@
 package app.beans;
 
-import app.dao.*;
+import app.dao.EntityDAO;
 import app.model.Author;
 import app.model.Book;
 import app.model.Reader;
 
-import javax.inject.Inject;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import javax.persistence.TypedQuery;
 import java.util.Date;
 import java.util.List;
-
-import javax.enterprise.context.SessionScoped;
 
 @Named("search")
 @SessionScoped
@@ -19,13 +17,6 @@ public class Search extends EntityDAO {
 
     public Search() {
         super();
-    }
-
-    @Inject
-    private BooksDAO booksDAO;
-
-    public List<Book> getFoundBooks() {
-        return booksDAO.getAll();
     }
 
     private Author authorForReaders;
@@ -133,10 +124,9 @@ public class Search extends EntityDAO {
         return query.getResultList();
     }
 
-    public Author getFavouriteAuthor() {
-//        String jpql = "SELECT a FROM Author a WHERE EXISTS (SELECT a1, count(*) mycount FROM Loan l, Book b, Author a1 WHERE ORDER BY mycount DESC LIMIT 1) as foo";
-        String jpql = "SELECT a FROM Author a";
-        TypedQuery<Author> query = em.createQuery(jpql, Author.class);
+    public Object[] getFavouriteAuthor() {
+        String jpql = "SELECT a, count(a) as loaned_books FROM Loan l JOIN l.book b JOIN b.author a group by a order by loaned_books desc";
+        TypedQuery<Object[]> query = em.createQuery(jpql, Object[].class);
         return query.getResultList().get(0);
     }
 }

@@ -5,7 +5,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
 
 <h:head>
     <title>Library</title>
@@ -16,39 +17,6 @@
     <a href="index.xhtml">Books</a><br/>
     <a href="loans.xhtml">Loans</a><br/>
 
-    <h1>Books</h1>
-    <h:form id="foundBooksForm">
-        <h:dataTable value="#{search.foundBooks}" var="book">
-            <h:column>
-                <f:facet name = "header">Id</f:facet>
-                #{book.id}
-            </h:column>
-
-            <h:column>
-                <f:facet name = "header">Title</f:facet>
-                #{book.title}
-            </h:column>
-
-            <h:column>
-                <f:facet name = "header">Author</f:facet>
-                #{book.author.firstName} #{book.author.lastName}
-            </h:column>
-
-            <h:column>
-                <f:facet name = "header">Category</f:facet>
-                #{book.category.name}
-            </h:column>
-
-            <h:column>
-                <f:facet name = "header">Isbn</f:facet>
-                #{book.isbn}
-            </h:column>
-        </h:dataTable>
-
-        <h:messages id="validationMessages" styleClass="error"/>
-
-    </h:form>
-
     <hr/>
     <h3>Get readers who read author in period</h3>
     <h:form id="readersWhoReadAuthor">
@@ -57,7 +25,7 @@
         </h:outputLabel>
         <h:selectOneMenu id="authorForReadersWhoReadAuthor" value="#{search.authorForReaders}" converter="authorConverter" required="true">
             <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-            <f:selectItems value="#{authors.authorsList}" var="a" itemValue="#{a}" itemLabel="#{a.firstName.concat(' ').concat(a.lastName)}"/>
+            <f:selectItems value="#{authors.listOfAll}" var="a" itemValue="#{a}" itemLabel="#{a.firstName.concat(' ').concat(a.lastName)}"/>
             <f:ajax event="change" render="@form" />
         </h:selectOneMenu><br/>
 
@@ -167,7 +135,85 @@
 
     <hr/>
     <h3>Favourite author</h3>
-    #{search.favouriteAuthor.id}. #{search.favouriteAuthor.firstName} #{search.favouriteAuthor.lastName}
+    #{search.favouriteAuthor[0].firstName} #{search.favouriteAuthor[0].lastName}
+
+    <hr/>
+    <h3>Advanced searching</h3>
+    <h:form id="advancedSearch">
+
+        <h:inputText id="advancedSearchAuthorName" value="#{advancedSearch.authorName}" pt:placeholder="Author name"/><br/>
+        <h:inputText value="#{advancedSearch.authorSurname}" pt:placeholder="Author surname"/><br/>
+        <h:inputText value="#{advancedSearch.bookTitle}" pt:placeholder="Book title"/><br/>
+
+        <h:outputLabel for="advancedSearchCategory">
+            Select category:
+        </h:outputLabel>
+        <h:selectOneMenu id="advancedSearchCategory" value="#{advancedSearch.bookCategory}" converter="categoryConverter">
+            <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true"/>
+            <f:selectItems value="#{CategoriesDAO.all}" var="c" itemValue="#{c}" itemLabel="#{''.concat(c.id).concat('. ').concat(c.name)}"/>
+            <f:ajax event="change" render="validationMessages"/>
+        </h:selectOneMenu><br/>
+
+        <h:inputText value="#{advancedSearch.readerName}" pt:placeholder="Reader name"/><br/>
+        <h:inputText value="#{advancedSearch.readerSurname}" pt:placeholder="Reader surname"/><br/>
+
+        <h:outputLabel for="advancedSearchBeginLoanDate">
+            Begin loan date:
+        </h:outputLabel>
+        <h:inputText a:type="date" id="advancedSearchBeginLoanDate" value="#{advancedSearch.startLoanDate}">
+            <f:convertDateTime pattern="yyyy-MM-dd"/>
+        </h:inputText><br/>
+
+        <h:outputLabel for="advancedSearchEndLoanDate">
+            End loan date:
+        </h:outputLabel>
+        <h:inputText a:type="date" id="advancedSearchEndLoanDate" value="#{advancedSearch.endLoanDate}">
+            <f:convertDateTime pattern="yyyy-MM-dd"/>
+        </h:inputText><br/>
+
+        <h:commandButton type="submit" value="Get loans results" action="#{advancedSearch.search}">
+            <f:ajax execute="@form" render="@form"/>
+        </h:commandButton><br/>
+
+        <h:panelGroup rendered="#{advancedSearch.result != null}">
+            <h:dataTable value="#{advancedSearch.result}" var="row">
+                <h:column>
+                    <f:facet name = "header">Reader</f:facet>
+                    #{row[1].firstName} #{row[1].lastName}
+                </h:column>
+
+                <h:column>
+                    <f:facet name = "header">Author</f:facet>
+                    #{row[3].firstName} #{row[3].lastName}
+                </h:column>
+
+                <h:column>
+                    <f:facet name = "header">Book title</f:facet>
+                    #{row[2].title}
+                </h:column>
+
+                <h:column>
+                    <f:facet name = "header">Book category</f:facet>
+                    #{row[2].category.name}
+                </h:column>
+
+                <h:column>
+                    <f:facet name = "header">Book isbn</f:facet>
+                    #{row[2].isbn}
+                </h:column>
+
+                <h:column>
+                    <f:facet name = "header">Begin date</f:facet>
+                    #{row[0].beginDate}
+                </h:column>
+
+                <h:column>
+                    <f:facet name = "header">End date</f:facet>
+                    #{row[0].endDate}
+                </h:column>
+            </h:dataTable>
+        </h:panelGroup>
+    </h:form>
 
 </h:body>
 </html>
