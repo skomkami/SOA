@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:a="http://java.sun.com/jsf/composite"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Forum</title>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+    <f:metadata>
+        <f:viewAction action="#{forum.redirect}" />
+        <f:viewAction action="#{notifications.initMDB}" />
+    </f:metadata>
+</h:head>
+
+<h:body>
+
+    <h:form id="loginForm" rendered="#{forum.user == null}">
+
+        <h:outputLabel for="login">
+            <h:outputText value="Login: "/>
+        </h:outputLabel>
+        <h:inputText binding="#{login}" required="true" id="login"  validatorMessage="Please enter your login" value="#{forum.login}">
+            <f:validateRegex pattern="^[a-zA-Z]+(([' -][a-zA-Z ])?[a-zA-Z]*)*$"/>
+            <f:ajax event="keyup" render="submit validationMessages"/>
+        </h:inputText><br/>
+
+        <h:outputLabel for="password">
+            <h:outputText value="Password: "/>
+        </h:outputLabel>
+        <h:inputSecret binding="#{password}" required="true" id="password"  validatorMessage="Please enter your password" value="#{forum.password}">
+            <f:validateRegex pattern="^[a-zA-Z]+(([' -][a-zA-Z ])?[a-zA-Z]*)*$"/>
+            <f:ajax event="keyup" render="submit validationMessages"/>
+        </h:inputSecret><br/>
+
+        <h:commandButton type="submit" id="loginSubmit" action="#{forum.logIn}" value="Log in">
+            <f:ajax execute="@form" render="@form"/>
+        </h:commandButton>
+        <h:messages id="validationMessages" styleClass="error"/>
+        <br/>
+        Don't have an account?
+        <a href="register.xhtml">Register</a><br/>
+    </h:form>
+
+</h:body>
+</html>

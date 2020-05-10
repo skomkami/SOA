@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:a="http://java.sun.com/jsf/composite"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<h:head>
+    <title>Forum</title>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+    <f:metadata>
+        <f:viewAction action="#{forum.redirect}" />
+    </f:metadata>
+</h:head>
+
+<h:body>
+
+    <h:panelGroup id="mainPanel" rendered="#{forum.user != null}">
+        #{forum.user.login}
+        <h:form id="logout" >
+            <h:commandButton type="submit" id="logoutSubmit" action="#{forum.logOut}" value="Log out">
+                <f:ajax execute="@form" render="loginForm mainPanel"/>
+            </h:commandButton>
+        </h:form>
+
+        <h:panelGroup id="notifications">
+            <h3> Messages </h3>
+            <c:forEach items="#{forum.notifications}" var="notification">
+                <p>There is a new entry in #{notification.themeList} in theme #{notification.theme}</p>
+            </c:forEach>
+
+            <h:form id="clearNotifications" >
+                <h:commandButton type="submit" id="clearNotificationsBtn" action="#{forum.clearNotifications}" value="Clear">
+                    <f:ajax execute="@form" render="notifications"/>
+                </h:commandButton>
+            </h:form>
+        </h:panelGroup>
+
+
+
+        <h3>Theme lists</h3>
+        <h:form id="theme-lists">
+            <h:dataTable value="#{ThemeListsDAO.all}" var="tl" id="theme-lists-dt">
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Subscribed" />
+                    </f:facet>
+                    <h:selectBooleanCheckbox value="#{forum.checkedMap[tl.id]}" />
+                </h:column>
+
+                <h:column>
+                    <f:facet name = "header">Id</f:facet>
+                    <h:outputText value="#{tl.id}"/>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="name">Name</f:facet>
+                    <h:outputText value="#{tl.name}"/>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="link">Link</f:facet>
+                    <h:commandButton id="selectButton" value="Open" action="#{themeList.goTo(tl)}"/>
+                </h:column>
+
+            </h:dataTable>
+            <h:commandButton type="submit" id="theme-lists-submit" action="#{forum.updateSubscribedThemeLists}" value="Update">
+                <f:ajax execute="@form" render="@form"/>
+            </h:commandButton>
+            <h:messages id="validationMessagesThemeLists" styleClass="error"/>
+
+        </h:form>
+        <br/>
+
+        <h2>Create new theme  list</h2>
+        <h:form id="add-theme-list">
+            <h:outputLabel for="new-theme-list-name">
+                <h:outputText value="Name: "/>
+            </h:outputLabel>
+            <h:inputText required="true" id="new-theme-list-name"  validatorMessage="Please enter name" value="#{forum.newThemeListName}">
+                <f:validateRegex pattern="^[a-zA-Z]+(([' -][a-zA-Z ])?[a-zA-Z]*)*$"/>
+                <f:ajax event="keyup" render="theme-lists validationMessagesNewThemeList"/>
+            </h:inputText><br/>
+
+            <h:commandButton type="submit" id="newThemeListSubmit" action="#{forum.createNewThemeList}" value="Create">
+                <f:ajax execute="@form" render="@form theme-lists"/>
+            </h:commandButton>
+            <h:messages id="validationMessagesNewThemeList" styleClass="error"/>
+
+        </h:form>
+
+    </h:panelGroup>
+
+</h:body>
+</html>

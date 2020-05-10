@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Theme list</title>
+    <f:metadata>
+        <f:viewAction action="#{themeList.redirectIfThemeListEmpty}" />
+    </f:metadata>
+</h:head>
+
+<h:body>
+    <h2>#{themeList.themeList.name}</h2>
+
+    <h3>Create new theme</h3>
+
+    <h:form id="add-theme-form">
+
+        <h:outputLabel for="new-theme-name">
+            <h:outputText value="Name: "/>
+        </h:outputLabel>
+        <h:inputText required="true" id="new-theme-name"  validatorMessage="Please enter name" value="#{themeList.createThemeName}">
+            <f:validateRegex pattern="^[a-zA-Z]+(([' -][a-zA-Z ])?[a-zA-Z]*)*$"/>
+            <f:ajax event="keyup" render="validationMessagesNewTheme"/>
+        </h:inputText><br/>
+
+        <h:commandButton type="submit" id="newThemeSubmit" action="#{themeList.createTheme}" value="Create">
+            <f:ajax execute="@form" render="@form themes"/>
+        </h:commandButton>
+
+        <h:messages id="validationMessagesNewTheme" styleClass="error"/>
+        <br/>
+    </h:form>
+
+    <h:form id="themes">
+        <h:dataTable value="#{themeList.themes}" var="theme">
+            <h:column>
+                <f:facet name = "header">Id</f:facet>
+                <h:outputText value="#{theme.id}"/>
+            </h:column>
+
+            <h:column>
+                <f:facet name = "header">Name</f:facet>
+                <h:outputText value="#{theme.name}"/>
+            </h:column>
+
+            <h:column>
+                <f:facet name="link">Link</f:facet>
+                <h:commandButton id="selectButton" value="Open" action="#{themeBean.goTo(theme)}"/>
+            </h:column>
+
+        </h:dataTable>
+    </h:form>
+</h:body>
+</html>

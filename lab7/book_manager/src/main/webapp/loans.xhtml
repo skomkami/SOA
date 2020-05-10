@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<h:head>
+    <title>Library</title>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+    <f:metadata>
+        <f:viewAction action="#{library.redirect}" />
+    </f:metadata>
+</h:head>
+
+<h:body>
+    <a href="books.xhtml">Books</a><br/>
+    <a href="search.xhtml">Search</a><br/>
+    #{library.reader.login}
+    <h:form id="logout" >
+        <h:commandButton type="submit" id="logoutSubmit" action="#{library.logOut}" value="Log out">
+            <f:ajax execute="@form" render="loginForm mainPanel"/>
+        </h:commandButton>
+    </h:form>
+
+    <h:panelGroup id="notifications">
+        <h3> Messages </h3>
+        <c:forEach items="#{notifications.getNotificationsForReader(library.reader)}" var="notification">
+            <p>#{notification.message}</p>
+        </c:forEach>
+
+        <h:form id="clearNotifications" >
+            <h:commandButton type="submit" id="clearNotificationsBtn" action="#{notifications.removeNotificationsForReader(library.reader)}" value="Clear">
+                <f:ajax execute="@form" render="notifications"/>
+            </h:commandButton>
+        </h:form>
+    </h:panelGroup>
+
+
+    <!--    Loans  section-->
+    <hr class="bold-line"/>
+    <h1>Loans</h1>
+    <h:form id="loansForm">
+        <h:dataTable value="#{loans.listOfAll}" var="loan">
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Select" />
+                </f:facet>
+                <h:selectBooleanCheckbox value="#{loans.checkedMap[loan.id]}" />
+            </h:column>
+
+            <h:column>
+                <f:facet name = "header">Id</f:facet>
+                #{loan.id}
+            </h:column>
+
+            <h:column>
+                <f:facet name = "header">Reader</f:facet>
+                #{loan.reader.firstName} #{loan.reader.lastName}
+            </h:column>
+
+            <h:column>
+                <f:facet name = "header">Book title</f:facet>
+                #{loan.book.title}
+            </h:column>
+
+            <h:column>
+                <f:facet name = "header">Begin date</f:facet>
+                #{loan.beginDate}
+            </h:column>
+
+            <h:column>
+                <f:facet name = "header">End date</f:facet>
+                #{loan.endDate}
+            </h:column>
+        </h:dataTable>
+
+        <h:commandButton type="submit" id="submitLoan" value="Delete selected" action="#{loans.delete}">
+            <f:ajax execute="@form" render="loansForm catalogForm editLoanForm"/>
+        </h:commandButton>
+        <h:messages id="validationMessagesLoans" styleClass="error"/>
+
+    </h:form>
+
+    <hr/>
+
+    <h3>Add loan</h3>
+    <h:form id="addLoan">
+
+        <h:outputLabel for="addLoanBook">
+            Select book:
+        </h:outputLabel>
+        <h:selectOneMenu id="addLoanBook" value="#{loans.addEntity.book}" converter="bookConverter" required="true">
+            <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+            <f:selectItems value="#{BooksDAO.all}" var="b" itemValue="#{b}" itemLabel="#{''.concat(b.id).concat('. ').concat(b.title)}"/>
+            <f:ajax event="change" render="validationMessagesLoan"/>
+        </h:selectOneMenu><br/>
+
+<!--        <h:outputLabel for="addLoanReader">-->
+<!--            Select reader:-->
+<!--        </h:outputLabel>-->
+<!--        <h:selectOneMenu id="addLoanReader" value="#{loans.addEntity.reader}" converter="readerConverter" required="true">-->
+<!--            <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />-->
+<!--            <f:selectItems value="#{ReadersDAO.all}" var="r" itemValue="#{r}" itemLabel="#{''.concat(r.id).concat('. ').concat(r.firstName).concat(' ').concat(r.lastName)}"/>-->
+<!--            <f:ajax event="change" render="validationMessagesLoan"/>-->
+<!--        </h:selectOneMenu><br/>-->
+
+        <h:outputLabel for="addLoanBeginDate">
+            Enter begin date:
+        </h:outputLabel>
+        <h:inputText a:type="date" id="addLoanBeginDate" value="#{loans.addEntity.beginDate}">
+            <f:convertDateTime pattern="yyyy-MM-dd"/>
+        </h:inputText><br/>
+
+        <h:outputLabel for="addLoanEndDate">
+            Enter end date:
+        </h:outputLabel>
+        <h:inputText a:type="date" id="addLoanEndDate" value="#{loans.addEntity.endDate}">
+            <f:convertDateTime pattern="yyyy-MM-dd"/>
+        </h:inputText><br/>
+
+        <h:commandButton type="submit" value="Add loan" action="#{loans.insertEntity}">
+            <f:ajax execute="@form" render="editLoanForm catalogForm loansForm @form"/>
+        </h:commandButton><br/>
+    </h:form>
+
+</h:body>
+</html>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<h:head>
+    <title>Theme</title>
+    <f:metadata>
+        <f:viewAction action="#{themeBean.redirectIfThemeEmpty}" />
+    </f:metadata>
+</h:head>
+
+<h:body>
+    <h2>#{themeBean.theme.name}</h2>
+
+    <h3>Create new entry</h3>
+
+    <h:form id="create-entry-form">
+
+        <h:outputLabel for="new-entry-content">
+            <h:outputText value="Content: "/>
+        </h:outputLabel><br/>
+        <h:inputTextarea required="true" id="new-entry-content" cols="30" rows="10" validatorMessage="Please enter content" value="#{themeBean.entryContent}">
+        </h:inputTextarea><br/>
+
+        <h:selectManyListbox id="users" value = "#{themeBean.notifyUsers}" converter="userConverter">
+            <f:selectItems value="#{themeBean.usersSubscribingThemeList}" var="u" itemValue="#{u}" itemLabel="#{u.login}"/>
+            <f:ajax event="change" render="validationMessagesNewEntry"/>
+        </h:selectManyListbox><br/>
+
+        <h:commandButton type="submit" id="newEntrySubmit" action="#{themeBean.createEntry}" value="Create entry">
+            <f:ajax execute="@form" render="@form entries"/>
+        </h:commandButton><br/>
+
+        <h:messages id="validationMessagesNewEntry" styleClass="error"/>
+        <br/>
+    </h:form>
+
+    <h:panelGroup id="entries">
+        <c:forEach items="#{themeBean.allEntries}" var="entry">
+            <h4> #{entry.author.login}</h4>
+            <p>#{entry.content}</p>
+        </c:forEach>
+    </h:panelGroup>
+</h:body>
+</html>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Register</title>
+</h:head>
+
+<h:body>
+    <h:form id="registerForm">
+
+        <h:outputLabel for="login">
+            <h:outputText value="Login: "/>
+        </h:outputLabel>
+        <h:inputText binding="#{login}" required="true" id="login"  validatorMessage="Please enter login" value="#{register.login}">
+            <f:validateRegex pattern="^[a-zA-Z]+(([' -][a-zA-Z ])?[a-zA-Z]*)*$"/>
+            <f:ajax event="keyup" render="submit validationMessages"/>
+        </h:inputText><br/>
+
+        <h:outputLabel for="first-name">
+            <h:outputText value="First name: "/>
+        </h:outputLabel>
+        <h:inputText required="true" id="first-name"  validatorMessage="Please enter first name" value="#{register.firstName}">
+            <f:validateRegex pattern="^[a-zA-Z]+(([' -][a-zA-Z ])?[a-zA-Z]*)*$"/>
+            <f:ajax event="keyup" render="submit validationMessages"/>
+        </h:inputText><br/>
+
+        <h:outputLabel for="last-name">
+            <h:outputText value="Last name: "/>
+        </h:outputLabel>
+        <h:inputText required="true" id="last-name"  validatorMessage="Please enter last name" value="#{register.lastName}">
+            <f:validateRegex pattern="^[a-zA-Z]+(([' -][a-zA-Z ])?[a-zA-Z]*)*$"/>
+            <f:ajax event="keyup" render="submit validationMessages"/>
+        </h:inputText><br/>
+
+        <h:outputLabel for="password1">
+            <h:outputText value="Enter password: "/>
+        </h:outputLabel>
+        <h:inputSecret binding="#{password1}" required="true" id="password1"  validatorMessage="Please enter password" value="#{register.pass1}">
+            <f:validateRegex pattern="^[a-zA-Z]+(([' -][a-zA-Z ])?[a-zA-Z]*)*$"/>
+            <f:ajax event="keyup" render="submit validationMessages"/>
+        </h:inputSecret><br/>
+
+        <h:outputLabel for="password2">
+            <h:outputText value="Confirm password: "/>
+        </h:outputLabel>
+        <h:inputSecret binding="#{password2}" required="true" id="password2"  validatorMessage="Please confirm password" value="#{register.pass2}">
+            <f:validateRegex pattern="^[a-zA-Z]+(([' -][a-zA-Z ])?[a-zA-Z]*)*$"/>
+            <f:ajax event="keyup" render="submit validationMessages"/>
+        </h:inputSecret><br/>
+
+        <h:outputLabel for="notifyOnBookCreation">
+            <h:outputText value="Notify me when new book is added to library"/>
+        </h:outputLabel>
+        <h:selectBooleanCheckbox id="notifyOnBookCreation" value="#{register.notifyOnBookCreation}"/>
+        <br/>
+
+        <h:commandButton type="submit" action="#{register.register}" value="Register">
+            <f:ajax execute="@form" render="@form"/>
+        </h:commandButton>
+        <h:messages id="validationMessages" styleClass="error"/>
+        <br/>
+    </h:form>
+</h:body>
+</html>
