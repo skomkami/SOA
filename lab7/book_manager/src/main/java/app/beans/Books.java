@@ -30,9 +30,9 @@ public class Books extends GenericBean<Book> {
             message .append(b.getTitle())
                     .append(" from author: ")
                     .append(b.getAuthor().getFirstName() + " " + b.getAuthor().getLastName())
-                    .append(", category: " + b.getCategory());
+                    .append(", category: " + b.getCategory().getName());
 
-            Notification notification = new Notification(message.toString(), reader.getLogin());
+            Notification notification = new Notification(message.toString(), reader);
             jmsService.sendMessage(notification);
         });
 

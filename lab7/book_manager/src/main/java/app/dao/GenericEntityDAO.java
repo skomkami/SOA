@@ -55,7 +55,7 @@ public abstract class GenericEntityDAO<T extends IdentifiableVersionedEntity> im
         }
         catch(Exception e) {
             rollbackTransaction();
-            System.err.println("Error during record insert: " + e);
+            System.err.println("Error during record insert: " + e.getMessage());
         }
     }
 
@@ -72,6 +72,7 @@ public abstract class GenericEntityDAO<T extends IdentifiableVersionedEntity> im
     }
 
     public void edit(T entity) {
+        beginTransaction();
         em.merge(entity);
         try {
             commitTransaction();

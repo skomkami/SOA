@@ -1,8 +1,9 @@
 package app.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "readers")
@@ -19,6 +20,13 @@ public class Reader extends IdentifiableVersionedEntity {
 
     @Column(name = "password", nullable = false)
     private String password;
+
+    @ManyToMany
+    @JoinTable(
+            name = "reader_awaiting_books",
+            joinColumns = @JoinColumn(name = "reader_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id"))
+    List<Book> awaitingBooks;
 
     public String getLogin() {
         return login;
@@ -65,5 +73,21 @@ public class Reader extends IdentifiableVersionedEntity {
 
     public Reader() {
         super();
+    }
+
+    public List<Book> getAwaitingBooks() {
+        return awaitingBooks;
+    }
+
+    public void setAwaitingBooks(List<Book> awaitingBooks) {
+        this.awaitingBooks = awaitingBooks;
+    }
+
+    public void addBookToAwaitFor(Book book) {
+        awaitingBooks.add(book);
+    }
+
+    public void removeBookToAwait(Book book) {
+        awaitingBooks = awaitingBooks.stream().filter(b -> b.getId() != book.getId()).collect(Collectors.toCollection(ArrayList::new));
     }
 }

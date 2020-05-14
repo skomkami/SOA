@@ -52,4 +52,21 @@ public class Book extends IdentifiableVersionedEntity {
         return isbn;
     }
 
+    @Override public boolean equals(Object obj) {
+        if (!(obj instanceof Book)) return false;
+        if(((Book) obj).getId() == this.getId() && ((Book) obj).getTitle().equals(this.getTitle()) && ((Book) obj).isbn.equals(this.getIsbn()))
+            return true;
+        else return false;
+
+    }
+    @Override public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + getId();
+        result = prime * result + ((title == null) ? 0 : title.hashCode());
+        result = prime * result + ((isbn == null) ? 0 : isbn.hashCode());
+
+        return result;
+    }
+
 }

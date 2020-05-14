@@ -29,12 +29,12 @@
 
     <h:panelGroup id="notifications">
         <h3> Messages </h3>
-        <c:forEach items="#{notifications.getNotificationsForReader(library.reader)}" var="notification">
+        <c:forEach items="#{NotificationsDAO.getNotificationsForReader(library.reader)}" var="notification">
             <p>#{notification.message}</p>
         </c:forEach>
 
         <h:form id="clearNotifications" >
-            <h:commandButton type="submit" id="clearNotificationsBtn" action="#{notifications.removeNotificationsForReader(library.reader)}" value="Clear">
+            <h:commandButton type="submit" id="clearNotificationsBtn" action="#{NotificationsDAO.removeNotificationsForReader(library.reader)}" value="Clear">
                 <f:ajax execute="@form" render="notifications"/>
             </h:commandButton>
         </h:form>
@@ -45,7 +45,7 @@
     <hr class="bold-line"/>
     <h1>Loans</h1>
     <h:form id="loansForm">
-        <h:dataTable value="#{loans.listOfAll}" var="loan">
+        <h:dataTable value="#{loans.currentUserLoans}" var="loan">
             <h:column>
                 <f:facet name="header">
                     <h:outputText value="Select" />
@@ -96,18 +96,9 @@
         </h:outputLabel>
         <h:selectOneMenu id="addLoanBook" value="#{loans.addEntity.book}" converter="bookConverter" required="true">
             <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
-            <f:selectItems value="#{BooksDAO.all}" var="b" itemValue="#{b}" itemLabel="#{''.concat(b.id).concat('. ').concat(b.title)}"/>
+            <f:selectItems value="#{loans.currentlyAvailableBooks}" var="b" itemValue="#{b}" itemLabel="#{''.concat(b.id).concat('. ').concat(b.title)}"/>
             <f:ajax event="change" render="validationMessagesLoan"/>
         </h:selectOneMenu><br/>
-
-<!--        <h:outputLabel for="addLoanReader">-->
-<!--            Select reader:-->
-<!--        </h:outputLabel>-->
-<!--        <h:selectOneMenu id="addLoanReader" value="#{loans.addEntity.reader}" converter="readerConverter" required="true">-->
-<!--            <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />-->
-<!--            <f:selectItems value="#{ReadersDAO.all}" var="r" itemValue="#{r}" itemLabel="#{''.concat(r.id).concat('. ').concat(r.firstName).concat(' ').concat(r.lastName)}"/>-->
-<!--            <f:ajax event="change" render="validationMessagesLoan"/>-->
-<!--        </h:selectOneMenu><br/>-->
 
         <h:outputLabel for="addLoanBeginDate">
             Enter begin date:
@@ -124,8 +115,27 @@
         </h:inputText><br/>
 
         <h:commandButton type="submit" value="Add loan" action="#{loans.insertEntity}">
-            <f:ajax execute="@form" render="editLoanForm catalogForm loansForm @form"/>
+            <f:ajax execute="@form" render="catalogForm loansForm @form"/>
         </h:commandButton><br/>
+    </h:form>
+
+    <h3>Notify me when unavailable book becomes available</h3>
+    <h:form id="addAwaitBookForm">
+
+        <h:outputLabel for="addAwaitBook">
+            Select book:
+        </h:outputLabel>
+        <h:selectOneMenu id="addAwaitBook" value="#{loans.awaitBook}" converter="bookConverter" required="true">
+            <f:selectItem itemLabel="-" itemValue="#{null}" noSelectionOption="true" />
+            <f:selectItems value="#{loans.currentlyUnavailableBooks}" var="b" itemValue="#{b}" itemLabel="#{''.concat(b.id).concat('. ').concat(b.title)}"/>
+            <f:ajax event="change" render="validationMessagesAwait"/>
+        </h:selectOneMenu><br/>
+
+        <h:commandButton type="submit" value="Observe" action="#{loans.addAwaitBook}">
+            <f:ajax execute="@form" render="@form"/>
+        </h:commandButton><br/>
+        <h:messages id="validationMessagesAwait" styleClass="error"/>
+
     </h:form>
 
 </h:body>

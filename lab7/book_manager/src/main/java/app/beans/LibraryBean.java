@@ -60,7 +60,7 @@ public class LibraryBean implements Serializable {
         } else {
             this.reader = findReader.get();
         }
-        return "loans.xhtml";
+         return "loans.xhtml";
     }
 
     public String logOut() {
